@@ -1,6 +1,6 @@
 # bearcatjs.com
 
-For English Documents: [README-EN.md](README.md)
+For English Documents: [README-EN.md](README-EN.md)
 
 中文文档的预览版本, 我放在了Coding.net上面进行托管, 参考: http://bearcatjs.cn/
 

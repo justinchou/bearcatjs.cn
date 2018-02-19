@@ -1,17 +1,21 @@
-title: markdown-editor
+title: markdown编辑器
 type: examples
 order: 1
 ---
 
 <iframe width="100%" height="500" src="bearcat-examples/browserify-markdown-editor/index.html" allowfullscreen="allowfullscreen" frameborder="0"></iframe> 
 
-Browserify lets you require('modules') in the browser by bundling up all of your dependencies. Therefore, it is easy to resolve a library using browserify by simply call `require('library')`. However, browserify bundles up all files, debug and edit files may meet up some problems. You should watch files and build up bundle file whenever code files changes, moreover when build errored, the error message should show up in the browser to make developer know what happened. For better debugger, developers should know how to use [source-map](http://thlorenz.com/blog/browserify-sourcemaps).  
-With bearcat, browserify will simply be a role of `library resolver`, developers write magic javaScript objects, and if want to use a library, use browserify to resolve it.  
+Browserify通过将所有依赖打包的方式, 让你可以简单的使用require('modules')来加载一个模块. 因此, 使用browserify加载一个库只需要`require('library')`即可. 
 
-This example shows how to use browserify with bearcat.  
+然而, browserify将左右代码打包, 编辑与调试就略显得繁琐. 任何情况下代码的更新都需要重新构建bundle, 此外当出现错误的时候, 错误将在浏览器中打印出来, 提示开发者. 有经验的开发者知道如何借助 [source-map](http://thlorenz.com/blog/browserify-sourcemaps)
 
-First, you should write a javaScript object named `requireUtil` for example as a bridge between bearcat and browserify.  
-This file will be bundled into browserify, and it can see `require` to resolve library. Then when some other files need to use a library from browserify, just inject `requireUtil` into it, that's it.  
+使用Bearcat, browserify将仅作为库依赖的解析功能存在, 开发者书写神奇的JavaScript对象, 如果需要使用库, browserify负责解析依赖.
+
+下面例子展示如何在Bearcat中使用browserify:
+
+首先, 你需要一个名为`requireUtil`的JavaScript对象, 作为Bearcat与browserify之间的桥梁. 这个文件需要与browserify打包在一起, 同时又能调用browserify中的`require`方法解析库.
+
+然后在其他文件需要从browserify中引用库的时候, 只需要注入`requireUtil`到该文件中即可.
 
 requireUtil.js
 ``` js
@@ -28,7 +32,7 @@ RequireUtil.prototype.init = function() {
 bearcat.module(RequireUtil, typeof module !== 'undefined' ? module : {});
 ```
 
-in your controller javaScript file, inject `requireUtil` with magic attribute `$requireUtil`  
+接着在控制器JavaScript文件中,  使用魔法属性 `$requireUtil` 注入 `requireUtil` 
 
 markDownController.js
 ``` js
@@ -40,7 +44,7 @@ var MarkDownController = function() {
 bearcat.module(MarkDownController, typeof module !== 'undefined' ? module : {});
 ```
 
-then add your code logic  
+最后专注于编写业务逻辑: 
 
 markDownController.js
 ``` js
@@ -62,7 +66,7 @@ MarkDownController.prototype.initBrace = function(md) {
 bearcat.module(MarkDownController, typeof module !== 'undefined' ? module : {});
 ```
 
-because `markDownController` file is asynchronously loaded, you can edit and debug as you like, just enjoy coding...   
+因为 `markDownController` 文件是异步加载的, 所以你可以尽情的编辑或者调试...   
 
-the whole sources can be found on [bearcat browserify-markdown-editor](https://github.com/bearcatjs/bearcat-examples/tree/master/browserify-markdown-editor)  
-this exmaple is originally cloned from [thlorenz browserify-markdown-editor](https://github.com/thlorenz/browserify-markdown-editor), you can make a comparison  
+完整源代码在 [bearcat browserify-markdown-editor](https://github.com/bearcatjs/bearcat-examples/tree/master/browserify-markdown-editor)  
+例子的原工程来自于 [thlorenz browserify-markdown-editor](https://github.com/thlorenz/browserify-markdown-editor), 你可以下载下来对比一下.

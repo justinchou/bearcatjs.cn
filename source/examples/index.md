@@ -1,13 +1,13 @@
-title: multipage
+title: 多页面依赖
 type: examples
 order: 0
 ---
 
 <iframe width="100%" height="300" src="bearcat-examples/example-multipage/car_BMW.html" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
-this example shows two pages, each page asynchronously loads different script files  
+本例子展示两个页面, 每个页面均异步加载不同的脚本文件
 
-when in BMW page, it uses `bmwCarController`, which requires `bmwCar`  
+BMW页面, 使用 `bmwCarController`, 依赖 `bmwCar`
 
 bmwCarController.js
 ``` js
@@ -23,7 +23,7 @@ BmwCarController.prototype.run = function() {
 bearcat.module(BmwCarController, typeof module !== 'undefined' ? module : {});
 ```
 
-`bmwCar` requires `bmwEngine` and `bmwWheel`  
+`bmwCar` 依赖 `bmwEngine` 和 `bmwWheel`  
 
 bmwCar.js
 ``` js
@@ -44,8 +44,8 @@ BmwCar.prototype.run = function() {
   
 bearcat.module(BmwCar, typeof module !== 'undefined' ? module : {});
 ```
-
-wire them up with bearcat  
+ 
+将这些统统使用Bearcat打包 
 ``` html
 <script src="./lib/bearcat.js"></script>
 <script src="./bearcat-bootstrap.js"></script>
@@ -59,4 +59,5 @@ bearcat.start(function() {
 </script>
 ```
 
-the whole source sources can be found on [example-multipage](https://github.com/bearcatjs/bearcat-examples/tree/master/example-multipage)
+完整源代码在 [example-multipage](https://github.com/bearcatjs/bearcat-examples/tree/master/example-multipage)
+

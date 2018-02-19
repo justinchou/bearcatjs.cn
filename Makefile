@@ -10,8 +10,12 @@ g:
 
 generate: g
 
-deploy:	all
+d:	all
 	hexo deploy
 
-update:
+deploy: d
+
+u:
 	cd bearcat-examples && git checkout master && git pull
+
+update: u

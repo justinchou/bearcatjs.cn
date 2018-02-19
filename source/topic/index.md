@@ -1,20 +1,23 @@
-title: "code hot reload"
+title: 代码热更新
 type: topic
 order: 1
 ---
 
-## Overview
-Node.js code hot reload can bring a lot of benifits, for example, you can hot update code in production, fix an emergency bug, change the logic of code. Especially when in a long connection service, restarting server will make users logout and then reconnect, it is bad for user experiences. However, by default, hot code reload is not supported in Node.js, because when doing hot reload, it is necessary to keep the reference of the objects, which may cause memory leak.  
-Bearcat provides a way for hot reload code, of course, there are some limits, not all codes updated will be hot reloaded.    
+## 概述
 
-## Theory
-Bearcat hot reload is based on bearcat's powerful IoC container, to watch some events, when hot reload files changed, Bearcat will dynamically replace the updated POJO's prototype functions. Therefore, because objects are shared with the same ***prototype*** object, when dynamically update the prototype object, all objects will be hot updated, without any influence to the objects' private fields.
+Node.js代码热更新可以带来大量的好处, 例如: 可以在生产环境进行代码的热更新, 修复紧急bug, 改变代码逻辑. 此外在长连接服务情况下, 重启服务器会导致用户退出和连接的断开, 以及断线重连, 用户体验很糟. 然而, Node.js默认是不支持热更新的, 因为热更新时需要在内存维护对象的引用, 这有可能导致内存溢出.
+Bearcat提供一种热更新代码的方法, 当然, 这是有前提条件和局限性的, 不是所有代码都会被热更新的.
 
-That is to say that what bearcat hot reload is actually the ***prototype*** functions, when you want to update a private field, it is not supported.   
+## 理论
 
-## Enable hot reload
+Bearcat热更新依赖Bearcat强大的控制反转容器, 监听一些事件, 当需要热更新的文件改变的时候, Bearcat将动态的替换更新POJO(简单的JS对象)的原形方法. 因为对象共用相同的***prototype***, 当动态更新了这个***prototype***对象, 所有对象将被动态更新, 然而无需影响对象自身的私有属性.
 
-pass params to ***bearcat.createApp***  
+这就是说, Bearcat热更新的只是***prototype***方法, 当你需要更新对象的私有属性时, 这是不支持的.
+
+## 开启热更新支持
+
+给 ***bearcat.createApp*** 方法传递参数:
+
 ```
 bearcat.createApp([contextPath], {
 	BEARCAT_HOT: 'on',
@@ -22,13 +25,15 @@ bearcat.createApp([contextPath], {
 })
 ```
 
-* BEARCAT_HOT: setup 'on' to turn on bearcat hot code reload
-* BEARCAT_HPATH: setup hot reload path, usually it is the scan source directory(app by default)
+* BEARCAT_HOT: 设置值为'on'开启热更新
+* BEARCAT_HPATH: 设置热更新路径, 一般情况就是所有的扫描路径, 默认是app文件夹
 
-## Watch directory
-Bearcat will watch your application runtime source directory by default it is ***app***, when it'is updated, bearcat will do hot reload for the updated files  
+## 观察路径
+  
+Bearcat将自动默认观察应用源码目录***app***, 当其中文件修改之后, Bearcat将对修改的文件执行热更新.
 
 app/car.js
+
 ```
 var Car = function() {
 	this.$id = "car";
@@ -42,11 +47,11 @@ Car.prototype.run = function() {
 module.exports = Car;
 ```
 
-Because bearcat updates the ***prototype***, the updated files need to provide the updated bean's ***id*** and ***func***, to imply which bean need to be updated and the newest prototype function definitions.    
+因为Bearcat只更新***prototype***, 被更新的文件需要提供对应bean的***id***和***func***, 用以标记哪一个bean需要被更新, 以及更新哪些方法.    
 
-## reload events
+## 重新加载事件
 
-listen to bearcat ***reload*** event, when watch codes changed, it will be fired  
+监听Bearcat的***reload***事件, 当Bearcat观察到文件修改之后, 将会触发这个事件.
 
 ```
 bearcat.on('reload', function() {
@@ -54,27 +59,32 @@ bearcat.on('reload', function() {
 });
 ```
 
-## Note
-* To change the default watch directory, you can start your app with ***hpath*** arguments to specify the hot reload watch directory
+## 注解
+
+* 想要更改默认的监听文件夹, 在启动应用的时候, 传递一个***hpath***参数, 来标记热更新监听文件夹
+
+例如:
 
 ```  
 node app hpath=xxx  
 ```
 
-or
+或者:
 
 ```
 node app --hpath=xxx  
 ```
 
-* Current verision of bearcat uses [chokidar](https://github.com/paulmillr/chokidar) to implement watching directory, therefore, you can update all files in the watch directory
+* 当前版本的Bearcat使用[chokidar](https://github.com/paulmillr/chokidar)来监听文件的变动, 因此你可以更新监听文件夹内的所有文件.
 
-* Avoid using gloal var in file, require by relative path when doing hot reload, because all of these are tightly coupled
+* 当使用热更新时, 尽量避免在文件中使用全局的var/let变量, 也要避免使用相对路径引用, 因为这些都是紧耦合的.
 
-* Some copy actions like ***bind***, ***concat*** will keep the reference, it will break the hot reload, for this concern you can listen ***reload*** event
+* 一些拷贝方法, 例如***bind***和***concat***, 将保持引用关系, 这将打断热更新, 为此, 你可以监听***reload***时间来做处理.
 
-## Examples
-* [bearcat hot reload](https://github.com/bearcatjs/bearcat/tree/master/examples/hot_reload)
+## 例子
 
-## Conclusion
-* Loosely coupled system makes it easy to hot reload part of codes, Bearcat uses IoC to decouple the dependency of objects
+* [Bearcat 热更新](https://github.com/bearcatjs/bearcat/tree/master/examples/hot_reload)
+
+## 总结
+
+* 松耦合系统的系统更易于热更新代码, 因为Bearcat使用控制反转(IoC)解耦对象依赖.

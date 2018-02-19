@@ -1,20 +1,21 @@
-title: Installation
+title: 安装
 type: guide
 order: 1
 ---
 
-## Frontend - browser
+## 前端 - 浏览器
 
-### Standalone
-Simply download and include with a script tag. `bearcat` will be registered as a global variable.
+### 独立安装
+
+下载并且使用script标签引入，`bearcat`将以全局变量出现。
 
 <div id="downloads">
-<a class="button" href="https://raw.githubusercontent.com/bearcatjs/bearcat/master/dist/bearcat.js" download>Development Version</a>
+<a class="button" href="https://raw.githubusercontent.com/bearcatjs/bearcat/master/dist/bearcat.js" download>开发版本</a>
 
-<a class="button" href="https://raw.githubusercontent.com/bearcatjs/bearcat/master/dist/bearcat.min.js" download>Production Version</a>
+<a class="button" href="https://raw.githubusercontent.com/bearcatjs/bearcat/master/dist/bearcat.min.js" download>线上版本</a>
 </div>
 
-### NPM - Using with [browserify](https://github.com/substack/node-browserify)
+### NPM - 使用 [browserify](https://github.com/substack/node-browserify)
 
 ``` bash
 $ npm install bearcat
@@ -30,7 +31,7 @@ var bearcat = require('bearcat');
 $ bower install bearcat
 ```
 
-## Backend - nodejs
+## 服务器 - nodejs
 
 ``` bash
 $ npm install bearcat
@@ -40,6 +41,6 @@ $ npm install bearcat
 var bearcat = require('bearcat');
 ```
 
-## Ready?
+## 准备好了么？
 
-[Let's Get Started](/guide/).
+[让我们开启Bearcat之旅](/guide/).

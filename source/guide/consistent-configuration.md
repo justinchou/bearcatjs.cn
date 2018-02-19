@@ -1,40 +1,49 @@
-title: Consistent-configuration
+title: 一致的配置文件
 type: guide
 order: 5
 ---
 
-## Overview
-In Node.js development, it is common that there are serveral envrionments like development, test, production and so. Corresponding to these envrioments are configurations differed from each other. Therefore, it is necessary to make these configuration consistently.  
+## 概览
 
-## Using placeHolders  
-placeHolder is a signature indicating the place to be replaced by the specific envrioment value  
-in Bearcat, the placeHolder can be like this:  
+在Nodejs开发过程中, 一般都会有多个环境, 例如development, test, production等等. 不同环境是根据配置文件的不同实现的. 因此有必要保持这些配置文件一致.
+
+## 使用占位符
+  
+占位符是一个变量代表该位置将被指定环境下的某值所替代. Bearcat中, 占位符这样定义: 
+
 ```
 ${car.num}
 ```
 
-then in config.json file you can define ***car.num*** with the specific value  
+配置文件config.json中, 给***car.num***赋值.
+
 ``` js
 {
     "car.num": 100
 }
 ```
 
-## Environment configuration
-In Bearcat, you can write different environment configurations in the following structure:  
-![directory structure](https://raw.githubusercontent.com/wiki/bearcatnode/bearcat/images/configuration-structure.png)
+## 环境配置
 
-in directory named ***config***, you put ***dev*** and ***prod*** sub-directory named by specific envrioment, and then write the specific configurations in these directory corresponding to each environment.  
+在Bearcat中, 可以用以下格式编写不同环境的配置文件:
+![directory structure](/images/configuration-structure.png)
 
-## Switching environment
-In Bearcat, you can switch different environment in the following ways:  
-* run with ***env*** or ***--env*** args  
+在***config***文件夹中, 放置***dev***和***prod***子文件夹, 文件夹名即为对应的环境名, 然后在文件夹下编写对应环境下的配置.  
+
+## 切换环境
+
+Bearcat中, 使用如下方法切换环境:
+
+* 启动时指定 ***env*** 或者 ***--env*** 参数
+
 ```
 node app.js env=prod
 ```
-* run with NODE_ENV  
+
+* 或者指定环境变量 NODE_ENV
+  
 ```
 NODE_ENV=prod node app.js
 ```
 
-by default, the env is ***dev***
+默认情况下, env环境变量值为 ***dev***

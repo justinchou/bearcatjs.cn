@@ -1,27 +1,32 @@
-title: bearcat-bootstrap.js
+title: bearcat-bootstrap.js文件
 type: guide
 order: 8
 ---
 
-As we all know, for frontend browser, there is no synchronous file io that can be used to load scripts. Therefore, a ***bearcat-bootstrap.js*** file is needed to tell bearcat the meta configurations and how to load these javaScript files  
+众所周知, 前端浏览器没有异步加载一说, 因此***bearcat-bootstrap.js***文件用于告诉Bearcat如何根据meta配置加载那些文件.
 
-bearcat-bootstrap.js file can be auto-generated, no need to write by yourself  
+bearcat-bootstrap.js 文件是自动生成的, 无需手写.  
 
-install bearcat  
+安装 bearcat
+
 ```
 npm install -g bearcat
+
+yarn add -G bearcat
 ```
 
-then in your project root directory, run   
+然后在工程的根目录执行下面代码生成 bearcat-bootstrap.js 文件.
+
 ```
 bearcat generate
 ```
 
-bearcat-bootstrap.js is ready for you  
-load it as you like by script tag or browerify require or amd define  
+可以通过script标签, browerify的require方法, 或者amd的define方法来加载该文件.  
 
 ``` html
 <script src="bearcat-bootstrap.js"></script>
 ```
 
-***note***：only when you add a file or delete a file or modify the file location，`bearcat-bootstrap.js` need to be regenerated, when you just edit files，it is not needed to be regenerated
+***注意***
+
+仅当增加/删除某个文件, 或者移动文件路径的时候需要重新生成`bearcat-bootstrap.js`, 当仅仅是修改文件内容, 则无需重新生成.

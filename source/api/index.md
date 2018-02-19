@@ -17,7 +17,7 @@ order: 1
  * @param  {String} opts.BEARCAT_LOGGER      ***设置成'off'关闭Bearcat内部日志***
  * @param  {String} opts.BEARCAT_HOT         ***设置成'off'关闭Bearcat的代码热更新***
  * @param  {String} opts.BEARCAT_HPATH       ***热更新代码的路径***
- * @param  {String} opts.BEARCAT_ANNOTATION  ***setup 'off' to turn off bearcat $ based annotation***
+ * @param  {String} opts.BEARCAT_ANNOTATION  ***设置成'off'关闭bearcat对function $注解的支持***
  * @param  {String} opts.BEARCAT_GLOBAL  	 ***将 bearcat 设置成全局变量***
  * @return {Object} **bearcat实例**
  * @api public

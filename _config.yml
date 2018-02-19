@@ -98,7 +98,7 @@ markdown:
 deploy:
   type: git
   repo:
-    #gitee: git@gitee.com:justinchou/bearcatjs.com.git
-    coding: git@git.coding.net:justinchou/bearcatjs.com.git
+    #gitee: git@gitee.com:justinchou/bearcatjs.cn.git
+    coding: git@git.coding.net:justinchou/bearcatjs.cn.git
   branch: master
   message: Deploy By Hexo

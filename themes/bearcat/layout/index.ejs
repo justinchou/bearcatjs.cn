@@ -1,21 +1,21 @@
 <div id="hero">
     <div class="inner">
         <ul id="nav">
-            <li><a href="/guide/" class="nav-link">Guide</a></li>
-            <li><a href="/api/" class="nav-link">API Reference</a></li>
-            <li><a href="/examples/" class="nav-link">Examples</a></li>
-            <li><a href="/blog/" class="nav-link">Blog</a></li>
+            <li><a href="/guide/" class="nav-link">快速入门</a></li>
+            <li><a href="/api/" class="nav-link">API</a></li>
+            <li><a href="/examples/" class="nav-link">例子</a></li>
+            <li><a href="/blog/" class="nav-link">博客</a></li>
             <li><a href="/topic/" class="nav-link">Topic</a></li>
-            <li><a href="/about/" class="nav-link">About</a></li>
+            <li><a href="/about/" class="nav-link">关于</a></li>
             <li><a href="https://github.com/bearcatjs/bearcat" target="_blank" class="nav-link">GitHub</a></li>
         </ul>
         <img class="logo" src="/images/logo.png">
-        <h1>bearcat</h1>
+        <h1>Bearcat 熊猫框架</h1>
         <p class="sub">Magic, self-described javaScript objects build up elastic, maintainable front-backend javaScript applications</p>
         <!--p class="desc">bearcat enables you to write just plain old javaScript objects with a bit magic and self-described to build applications both for frontend and backend<br>It provides dependency injection with asynchronous loading .</p-->
         <p class="buttons">
-            <a href="/guide/installation.html" class="button">Get bearcat</a>
-            <a href="https://github.com/bearcatjs/bearcat" target="_blank" class="button">Source on GitHub</a>
+            <a href="/guide/installation.html" class="button">获取 Bearcat</a>
+            <a href="https://github.com/bearcatjs/bearcat" target="_blank" class="button">访问 GitHub 获取</a>
         </p>
         <ul id="social">
             <li><iframe src="http://ghbtns.com/github-btn.html?user=bearcatjs&repo=bearcat&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe></li>
@@ -38,7 +38,7 @@
     </div>
 </div>
 <div id="example">
-    <h2>10 Seconds Example</h2>
+    <h2>10 秒入门小栗子🌰</h2>
     <div class="g-gist f-cb">
         <div class="gists"><pre><code class="js">var Car = function() {
     this.$id = "car";
@@ -63,35 +63,35 @@ Engine.prototype.run = function() {
 bearcat.module(Engine, typeof module !== 'undefined' ? module : {});
 </code></pre></div>
     </div>
-    <h2>engine will be automatically loaded and injected into car</h2>
-    <h2>car is ready to run just for you to invoke</h2>
+    <h2>engine 将自动的加载并且注入到 car 之中</h2>
+    <h2>然后 car 就已经初始化成功, 等待你调用run方法将小车跑起来了!</h2>
     <img class="logo" src="/images/car.png">
 </div>
 <div id="features">
     <div class="feats">
         <div class="feat">
-            <h2><span class="icon simple"></span>Simple</h2>
-            <p>Write simple plain old javaScript objects, that's it.</p>
+            <h2><span class="icon simple"></span>简单</h2>
+            <p>简单易学, 只需要编写传统的JavaScript对象就行了.</p>
         </div>
         <div class="feat">
-            <h2><span class="icon fast"></span>Efficient</h2>
-            <p>Dependency injection with asynchronous loading(frontend), no need to use define, require, or a bundle file.</p>
+            <h2><span class="icon fast"></span>高效</h2>
+            <p>依赖注入在前端浏览器中使用异步加载方式, 无需使用define, require, 或者 bundle 文件.</p>
         </div>
         <div class="feat">
-            <h2><span class="icon composable"></span>Reuseable</h2>
-            <p>Simple javaScript objects can be used for frontend and backend(node.js) without any modifications.</p>
+            <h2><span class="icon composable"></span>可复用</h2>
+            <p>普通的JavaScript对象就可以在前端浏览器和后端(node.js)服务器中实现代码复用, 而无需任何额外修改.</p>
         </div>
         <div class="feat">
-            <h2><span class="icon compact"></span>Easy</h2>
-            <p>Easy to use, all javaScript objects will be scaned ready for you, no need to write extra complex, messy configuration files.</p>
+            <h2><span class="icon compact"></span>容易</h2>
+            <p>容易使用, 所有JavaScript对象自动扫描加载, 无需编写额外的复杂难懂的配置文件.</p>
         </div>
         <div class="feat">
-            <h2><span class="icon powerful"></span>Powerful</h2>
-            <p>Powered by dependency injection, AOP based declarative middleware services.</p>
+            <h2><span class="icon powerful"></span>强大</h2>
+            <p>引入依赖注入(DI), 面向切面编程(AOP), 基于声明式中间件服务.</p>
         </div>
         <div class="feat">
-            <h2><span class="icon module"></span>Moduler</h2>
-            <p>You just use only those parts that you need.</p>
+            <h2><span class="icon module"></span>组件式</h2>
+            <p>只需要使用你需要的部分.</p>
         </div>
     </div>
 </div>
@@ -107,7 +107,7 @@ bearcat.module(Engine, typeof module !== 'undefined' ? module : {});
     </ul>
 </div> -->
 <div id="footer">
-    <p>Released under the <a href="http://opensource.org/licenses/MIT" target="_blank">MIT License</a></p>
-    <p>Copyright (c) <%- date(Date.now(), 'YYYY') %> <a href="http://bearcatjs.com" target="_blank">bearcat</a></p>
+    <p>开源协议依照 <a href="http://opensource.org/licenses/MIT" target="_blank">MIT License</a></p>
+    <p>Copyright (c) <%- date(Date.now(), 'YYYY') %> <a href="http://bearcatjs.com" target="_blank">Bearcat</a></p>
     <p>Hosted by <a href="https://pages.coding.me" style="font-weight:bold">Coding Pages</a></p>
 </div>

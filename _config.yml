@@ -3,7 +3,7 @@
 ## Source: https://github.com/tommy351/hexo/
 
 # Site
-title: bearcat - Magic, self-described javaScript objects build up elastic, maintainable javaScript applications
+title: Bearcat - Magic, self-described javaScript objects build up elastic, maintainable javaScript applications
 subtitle:
 description: "Magic, self-described javaScript objects build up elastic, maintainable javaScript applications"
 author: fantasyni
@@ -12,7 +12,7 @@ language:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://bearcatjs.com/
+url: http://bearcatjs.cn/
 root: /
 permalink: :year/:month/:day/:title/
 tag_dir: tags

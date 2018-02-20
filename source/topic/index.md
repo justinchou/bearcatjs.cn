@@ -28,11 +28,11 @@ bearcat.createApp([contextPath], {
 * BEARCAT_HOT: 设置值为'on'开启热更新
 * BEARCAT_HPATH: 设置热更新路径, 一般情况就是所有的扫描路径, 默认是app文件夹
 
-## 观察路径
+## 监听文件夹
   
-Bearcat将自动默认观察应用源码目录***app***, 当其中文件修改之后, Bearcat将对修改的文件执行热更新.
+Bearcat 默认会监听应用目录下的 ***hot*** 文件夹里面的内容, 当里面的内容有更新时, bearcat 就会对更新的文件进行热更新
 
-app/car.js
+hot/car.js
 
 ```
 var Car = function() {
@@ -48,6 +48,38 @@ module.exports = Car;
 ```
 
 因为Bearcat只更新***prototype***, 被更新的文件需要提供对应bean的***id***和***func***, 用以标记哪一个bean需要被更新, 以及更新哪些方法.    
+
+## $ 注解下代码热更新
+
+如果采用构造函数内 $ 自描述的方式进行配置, 那么就无需 exports 一个 ***id***, ***func*** 的对象, hot 的代码和原来已$注解描述的代码一致, 无需修改
+
+bus.js
+
+```
+var Bus = function() {
+	this.$id = "bus";
+}
+
+Bus.prototype.run = function() {
+	return 'bus';
+}
+
+module.exports = Bus;
+```
+
+hot/bus.js
+
+```
+var Bus = function() {
+	this.$id = "bus";
+}
+
+Bus.prototype.run = function() {
+	return 'bus hot';
+}
+
+module.exports = Bus;
+```
 
 ## 重新加载事件
 
@@ -87,4 +119,9 @@ node app --hpath=xxx
 
 ## 总结
 
-* 松耦合系统的系统更易于热更新代码, 因为Bearcat使用控制反转(IoC)解耦对象依赖.
+* 松耦合系统的系统更易于热更新代码, 因为Bearcat使用控制反转(IoC)解耦对象依赖, 对象间不直接依赖在一起, 对象们通过bearcat变成一个统一完整的整体, 这也使得对系统内部分对象动态更新成为了可能.
+
+## 注意
+
+使用 process.env.BEARCAT_HOT = 'off'; 来关闭bearcat热更新功能, 不会对hot reload path进行监控.
+

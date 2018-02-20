@@ -7,7 +7,7 @@ order: 1
 
 ### 独立安装
 
-下载并且使用script标签引入, `bearcat`将以全局变量出现. 
+下载并且使用script标签引入,  `bearcat` 将以全局变量出现. 
 
 <div id="downloads">
 <a class="button" href="https://raw.githubusercontent.com/bearcatjs/bearcat/master/dist/bearcat.js" download>开发版本</a>
@@ -21,7 +21,7 @@ order: 1
 $ npm install bearcat
 ```
 
-``` js
+```js
 var bearcat = require('bearcat');
 ```
 
@@ -37,7 +37,7 @@ $ bower install bearcat
 $ npm install bearcat
 ```
 
-``` js
+```js
 var bearcat = require('bearcat');
 ```
 

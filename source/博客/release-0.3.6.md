@@ -8,9 +8,9 @@ order: 2
 
 ## 使用
 
-启动bearcat时传入两个参数  
+启动bearcat时传入两个参数
 
-```
+```js
 bearcat.createApp([contextPath], {
 	BEARCAT_HOT: 'on',
 	BEARCAT_HPATH: 'setup your hot reload source path'

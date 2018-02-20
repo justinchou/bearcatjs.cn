@@ -6,7 +6,7 @@ comments: true
 ## Overview
 Frontend dependency management is always the discussion point, people have a lot of to say. The key reason for this is that javaScript language itself does not provide `module` like support, it really sucks developers.  
 
-For years ago, developers used to use `<script>` tag to write code, however when the page codes grows, the maintainability will be harder and harder. Then, with the arise of [nodejs](http://nodejs.org/), [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) brings up using `require`, `exports` to resolve modules. It seems really nice when using in nodejs, however, when it meets browser, it works not quite well. The reason is simply that browser does not support synchronous `require`, it can not load a script from file I/O. Then [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) comes up a specification used well for browser, as the AMD says:  
+For years ago, developers used to use `<script>` tag to write code, however when the page codes grows, the maintainability will be harder and harder. Then, with the arise of [nodejs](http://nodejs.org/), [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) brings up using `require` ,  `exports` to resolve modules. It seems really nice when using in nodejs, however, when it meets browser, it works not quite well. The reason is simply that browser does not support synchronous  `require` , it can not load a script from file I/O. Then [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) comes up a specification used well for browser, as the AMD says:  
 
 <!-- more -->
 
@@ -26,18 +26,19 @@ when using AMD, it is easy to run into the following road-blocks:
 - Where is the root of my application ? Should I write a alias to use it ?
 - What about sharing code client/server ? 
 
-AMD especially [requirejs](http://requirejs.org/docs/api.html) has its answers for every question. AMD's answer for `nearly every one of them` is to `add some configuration directivers` or `write a r.js plug-in`.  
+AMD especially [requirejs](http://requirejs.org/docs/api.html) has its answers for every question. AMD's answer for `nearly every one of them` is to `add some configuration directivers` or  `write a r.js plug-in` .  
 Then we write configrutions file with many lines long of obscure directives, and these files are hard to be reused for example, used for the tests.  
 
 So, what about asynchronous loading scripts without using AMD like `define` or writing messy configuration file ?
-This is what [bearcat](http://bearcatjs.org) tries to make an effort, which enables developers to write `magic, self-described javaScript objects` and simply register them to bearcat, bearcat will resolve dependencies, asynchronous loading srcipts when needed, ready for you to use. There are no `define`, no `require`, no `bundle file`, everything is simple, easy, and back to javaScript nature.  
+This is what [bearcat](http://bearcatjs.org) tries to make an effort, which enables developers to write `magic, self-described javaScript objects` and simply register them to bearcat, bearcat will resolve dependencies, asynchronous loading srcipts when needed, ready for you to use. There are no  `define` , no  `require` , no  `bundle file` , everything is simple, easy, and back to javaScript nature.  
 
 ## Show me some codes
 Let's begin with a dead simple example: 
 A simple car must have an engine to startup, so you write two files. 
 
 car.js
-``` js
+
+```js
 var Car = function() {
 }
   
@@ -48,7 +49,8 @@ Car.prototype.run = function() {
 ```
 
 engine.js
-``` js
+
+```js
 var Engine = function() {
 }
   
@@ -59,14 +61,15 @@ Engine.prototype.run = function() {
 
 Car has the dependency of engine, so how to resolve the dependency ? 
 In AMD(requirejs), you should do the following:  
-* wrap the code with `define`
+* wrap the code with  `define` 
 * in define, resolve `engine` dependency
 * setup data-main, then run
 
 so codes may be like this:  
 
 car.js
-``` js
+
+```js
 define(function(require) {
     var Engine = require('./engine');
   
@@ -84,7 +87,8 @@ define(function(require) {
 ```
 
 engine.js
-``` js
+
+```js
 define(function(require) {
     var Engine = function() {}
   
@@ -96,14 +100,14 @@ define(function(require) {
 })
 ```
 
-using `define`, the codes will be hard to be shared for client/server  
-using `relative path`, car and engine are tightly coupled, what if the car wants to use another engine to run ?  
+using  `define` , the codes will be hard to be shared for client/server  
+using  `relative path` , car and engine are tightly coupled, what if the car wants to use another engine to run ?  
 
 In bearcat, it is dead simple and nature.  
 Just add some `magic attributes` to javaScript objects, and that's it !
 
 car.js
-``` js
+```js
 var Car = function() {
     this.$id = "car";
     this.$engine = null;
@@ -118,7 +122,7 @@ bearcat.module(Car, typeof module !== 'undefined' ? module : {});
 ```
 
 engine.js
-``` js
+```js
 var Engine = function() {
     this.$id = "engine";
 }
@@ -131,16 +135,16 @@ bearcat.module(Engine, typeof module !== 'undefined' ? module : {});
 ```
 
 car and engine use `this.$id` attribute to define its unique id  
-car use `this.$engine` attribute to tell bearcat that it wants a dependency with the id of `engine`
+car use `this.$engine` attribute to tell bearcat that it wants a dependency with the id of  `engine` 
 car and engine both register its function constructor with magic attributes to bearcat
 
 then, what does bearcat do ?
-* resolve dependencies, knows car wants a dependency with the id of `engine`
+* resolve dependencies, knows car wants a dependency with the id of  `engine` 
 * asynchronously load `engine.js` script file
 * when car instance is created, automatically inject `engine` instance into car's `$engine` attribute
-* when car invokes `run` method, engine is also ready to `run`
+* when car invokes `run` method, engine is also ready to  `run` 
 
-So, as you can see, what bearcat does is `dependency injection with asynchronous loading`.  
+So, as you can see, what bearcat does is  `dependency injection with asynchronous loading` .  
 
 the whole demo sources can be found on [AMD vs bearcat](https://github.com/bearcatjs/bearcat-examples/tree/master/bearcat-vs-AMD)
 
@@ -153,21 +157,22 @@ the whole demo sources can be found on [AMD vs bearcat](https://github.com/bearc
 AMD and bearcat both supports asynchronous scripts loading as needed, both are easy to edit and debug.  
 
 ### configuration
-* AMD(requirejs) needs to config for `baseUrl`, `shim`, `alias`, `packages` etc ... What's more, this configuration file can not be shared very well. When you want to use in another project or for use in unit-test, you should modifiy configuration file to make AMD happy.    
+* AMD(requirejs) needs to config for `baseUrl` ,  `shim` ,  `alias` ,  `packages` etc ... What's more, this configuration file can not be shared very well. When you want to use in another project or for use in unit-test, you should modifiy configuration file to make AMD happy.    
 * bearcat does not need much configuration, as you can see, all configurations are embeded into javaScript objects themselves, that's it, then bearcat will do the following work, resolve dependency, asynchronously load script file if needed, create instance and inject it.  
 
 ## Want to use a libray ?
 bearcat does not care about how to use a library, as long as it is a javaScript library, can be used in browser, it is ok. bearcat also does not resolve library as a dependency, for this concern, developers can try to using bearcat with [browserify](http://browserify.org/) for example.  
 
 ### Using with browserify
-Browserify lets you require('modules') in the browser by bundling up all of your dependencies. Therefore, it is easy to resolve a library using browserify by simply call `require('library')`. However, browserify bundles up all files, debug and edit files may meet up some problems. You should watch files and build up bundle file whenever code files changes, moreover when build errored, the error message should show up in the browser to make developer know what happened. For better debugger, developers should know how to use [source-map](http://thlorenz.com/blog/browserify-sourcemaps).  
-With bearcat, browserify will simply be a role of `library resolver`, developers write magic javaScript objects, and if want to use a library, use browserify to resolve it.  
+Browserify lets you require('modules') in the browser by bundling up all of your dependencies. Therefore, it is easy to resolve a library using browserify by simply call  `require('library')` . However, browserify bundles up all files, debug and edit files may meet up some problems. You should watch files and build up bundle file whenever code files changes, moreover when build errored, the error message should show up in the browser to make developer know what happened. For better debugger, developers should know how to use [source-map](http://thlorenz.com/blog/browserify-sourcemaps).  
+With bearcat, browserify will simply be a role of  `library resolver` , developers write magic javaScript objects, and if want to use a library, use browserify to resolve it.  
 
 Here comes with an example: use `jQuery` library  
-write a javaScript object named with `requireUtil`, this acts as a bridge between browserify and bearcat    
+write a javaScript object named with  `requireUtil` , this acts as a bridge between browserify and bearcat    
 
 requireUtil.js
-``` js
+
+```js
 var RequireUtil = function() {
     this.$id = "requireUtil";
     this.$init = "init"; // nice, sweet init hook
@@ -182,10 +187,11 @@ RequireUtil.prototype.init = function() {
 bearcat.module(RequireUtil, typeof module !== 'undefined' ? module : {});
 ``` 
 
-write our main javaScript object named with `testJquery`, it has the dependency of `requireUtil`.  
+write our main javaScript object named with  `testJquery` , it has the dependency of  `requireUtil` .  
 
 testJquery.js
-``` js
+
+```js
 var TestJquery = function() {
     this.$id = "testJquery";
     this.$requireUtil = null;
@@ -201,7 +207,7 @@ bearcat.module(TestJquery, typeof module !== 'undefined' ? module : {});
 
 bundle `requireUtil.js` into browserify to enable `require` ability  
 
-``` js
+```js
 var bearcat = require('bearcat');
 window.bearcat = bearcat;          // make bearcat global
 bearcat.createApp();

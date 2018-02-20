@@ -10,15 +10,15 @@ Bearcat提供一种热更新代码的方法, 当然, 这是有前提条件和局
 
 ## 理论
 
-Bearcat热更新依赖Bearcat强大的控制反转容器, 监听一些事件, 当需要热更新的文件改变的时候, Bearcat将动态的替换更新POJO(简单的JS对象)的原形方法. 因为对象共用相同的***prototype***, 当动态更新了这个***prototype***对象, 所有对象将被动态更新, 然而无需影响对象自身的私有属性.
+Bearcat热更新依赖Bearcat强大的控制反转容器, 监听一些事件, 当需要热更新的文件改变的时候, Bearcat将动态的替换更新POJO(简单的JS对象)的原形方法. 因为对象共用相同的 ***prototype*** , 当动态更新了这个 ***prototype*** 对象, 所有对象将被动态更新, 然而无需影响对象自身的私有属性.
 
-这就是说, Bearcat热更新的只是***prototype***方法, 当你需要更新对象的私有属性时, 这是不支持的.
+这就是说, Bearcat热更新的只是 ***prototype*** 方法, 当你需要更新对象的私有属性时, 这是不支持的.
 
 ## 开启热更新支持
 
 给 ***bearcat.createApp*** 方法传递参数:
 
-```
+```js
 bearcat.createApp([contextPath], {
 	BEARCAT_HOT: 'on',
 	BEARCAT_HPATH: 'setup your hot reload source path'
@@ -34,58 +34,58 @@ Bearcat 默认会监听应用目录下的 ***hot*** 文件夹里面的内容, �
 
 hot/car.js
 
-```
+```js
 var Car = function() {
 	this.$id = "car";
-}
+};
 
 Car.prototype.run = function() {
 	console.log('run hot car...');
 	return 'car hot';
-}
+};
 
 module.exports = Car;
 ```
 
-因为Bearcat只更新***prototype***, 被更新的文件需要提供对应bean的***id***和***func***, 用以标记哪一个bean需要被更新, 以及更新哪些方法.    
+因为Bearcat只更新 ***prototype*** , 被更新的文件需要提供对应bean的 ***id*** 和 ***func*** , 用以标记哪一个bean需要被更新, 以及更新哪些方法.    
 
 ## $ 注解下代码热更新
 
-如果采用构造函数内 $ 自描述的方式进行配置, 那么就无需 exports 一个 ***id***, ***func*** 的对象, hot 的代码和原来已$注解描述的代码一致, 无需修改
+如果采用构造函数内 $ 自描述的方式进行配置, 那么就无需 exports 一个 ***id*** ,  ***func*** 的对象, hot 的代码和原来已$注解描述的代码一致, 无需修改
 
 bus.js
 
-```
+```js
 var Bus = function() {
 	this.$id = "bus";
-}
+};
 
 Bus.prototype.run = function() {
 	return 'bus';
-}
+};
 
 module.exports = Bus;
 ```
 
 hot/bus.js
 
-```
+```js
 var Bus = function() {
 	this.$id = "bus";
-}
+};
 
 Bus.prototype.run = function() {
 	return 'bus hot';
-}
+};
 
 module.exports = Bus;
 ```
 
 ## 重新加载事件
 
-监听Bearcat的***reload***事件, 当Bearcat观察到文件修改之后, 将会触发这个事件.
+监听Bearcat的 ***reload*** 事件, 当Bearcat观察到文件修改之后, 将会触发这个事件.
 
-```
+```js
 bearcat.on('reload', function() {
 	console.log('reload occured...');
 });
@@ -93,17 +93,17 @@ bearcat.on('reload', function() {
 
 ## 注解
 
-* 想要更改默认的监听文件夹, 在启动应用的时候, 传递一个***hpath***参数, 来标记热更新监听文件夹
+* 想要更改默认的监听文件夹, 在启动应用的时候, 传递一个 ***hpath*** 参数, 来标记热更新监听文件夹
 
 例如:
 
-```  
+```bash
 node app hpath=xxx  
 ```
 
 或者:
 
-```
+```bash
 node app --hpath=xxx  
 ```
 
@@ -111,7 +111,7 @@ node app --hpath=xxx
 
 * 当使用热更新时, 尽量避免在文件中使用全局的var/let变量, 也要避免使用相对路径引用, 因为这些都是紧耦合的.
 
-* 一些拷贝方法, 例如***bind***和***concat***, 将保持引用关系, 这将打断热更新, 为此, 你可以监听***reload***时间来做处理.
+* 一些拷贝方法, 例如 ***bind*** 和 ***concat*** , 将保持引用关系, 这将打断热更新, 为此, 你可以监听 ***reload*** 时间来做处理.
 
 ## 例子
 

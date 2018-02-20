@@ -9,7 +9,7 @@ bearcat-bootstrap.js 文件是自动生成的, 无需手写.
 
 安装 bearcat
 
-```
+```bash
 npm install -g bearcat
 
 yarn add -G bearcat
@@ -17,7 +17,7 @@ yarn add -G bearcat
 
 然后在工程的根目录执行下面代码生成 bearcat-bootstrap.js 文件.
 
-```
+```bash
 bearcat generate
 ```
 

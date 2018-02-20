@@ -7,15 +7,15 @@ comments: true
 
 [browserify](https://github.com/substack/node-browserify) is a great project that makes npm everywhere.  
 
-`Browserify lets you require('modules') in the browser by bundling up all of your dependencies.`  
+ `Browserify lets you require('modules') in the browser by bundling up all of your dependencies.`   
 
 It is really cool since developers can now use modules from npm which is growing extremely fast, more and more front-end libraries, tools, frameworks are now supporting npm, it is a great advantage. browserify makes it real for front-end developers to use npm modules without much pains.  
 
-browserify uses the same module system as node, it is called [node-flavored](http://nodejs.org/docs/latest/api/modules.html) CommonJS modules. It uses `require`, `exports` to organize modules, and uses `package.json`, `node_modules` to make module reuseable.  
+browserify uses the same module system as node, it is called [node-flavored](http://nodejs.org/docs/latest/api/modules.html) CommonJS modules. It uses `require` ,  `exports` to organize modules, and uses `package.json` ,  `node_modules` to make module reuseable.  
 
 therefore, you write node-style modular codes, you can test in node, then if you want to use in the browser, you bundle it through `browserify` command：  
 
-```
+```bash
 browserify hello.js > bundle.js
 ```
 
@@ -34,7 +34,7 @@ as you see, browserify bundles all modular codes in a build process, then it use
 <!-- more -->
 
 ## browserify problems
-All problems browserify faces come from the annoying `build process`, it is not exist in nodejs environment, however when in browser environment it is a must to make CommonJS work.  
+All problems browserify faces come from the annoying  `build process` , it is not exist in nodejs environment, however when in browser environment it is a must to make CommonJS work.  
 Then developers have to edit the code, build the bundle, set up a debugger, find the source, edit the code, then build the bundle again...
 Coding and editing will be not easy for most developers, although browserify provides some usefull tools to resolve all these pains:  
 * Use [watchify](https://www.npmjs.com/package/watchify), a browserify compatible caching bundler, for super-fast bundle rebuilds as you develop.
@@ -52,12 +52,12 @@ When you write modular codes, set up the main file, and the asynchronous script 
 Therefore, what about `browserify with asynchronous script loading` ? Sounds cool, reallly ?  
 The approach is that using browserify to resolve modules from npm and using asynchronous script loading to write application level codes.  
 To achieve the above goal, there's now another choice not just the way that AMD provides.  
-The choice is that we can now use `dependency injection with asynchronous script loading`.  
+The choice is that we can now use  `dependency injection with asynchronous script loading` .  
 
 ## dependency injection
-CommonJS and AMD actually both implements the same design pattern named `service locator`, in service locator developers call the `require` or `define` function to ask explicitly for the dependency from the locator, the locator then feeds the dependency module back, this pattern is simple and easy. `Dependency injection`, however on the other end, components do not look up, they provide plain simple configuration metadata enabling the container to resolve dependencies. The container is wholly responsible for wiring up components, passing resolved objects into JavaScript Object properties or constructors.  Hence the inversion of control.  
+CommonJS and AMD actually both implements the same design pattern named `service locator` , in service locator developers call the  `require` or `define` function to ask explicitly for the dependency from the locator, the locator then feeds the dependency module back, this pattern is simple and easy.  `Dependency injection` , however on the other end, components do not look up, they provide plain simple configuration metadata enabling the container to resolve dependencies. The container is wholly responsible for wiring up components, passing resolved objects into JavaScript Object properties or constructors.  Hence the inversion of control.  
 
-`Service locator` and `dependency injection` are both ways to resolve dependencies and enable modular codes, there is no golden rule on which is better, it all depends. Basically, when you write to quick and easy development, like library、 shell、 tools, you may choose to use `service locator`. When you want to write project that needed be continuously maintainable, you may choose to use `dependency injection`. What's more, `service locator` and `dependency injection` can be used together to take advantages of both.   
+ `Service locator`  and `dependency injection` are both ways to resolve dependencies and enable modular codes, there is no golden rule on which is better, it all depends. Basically, when you write to quick and easy development, like library、 shell、 tools, you may choose to use `service locator` . When you want to write project that needed be continuously maintainable, you may choose to use  `dependency injection` . What's more,  `service locator` and `dependency injection` can be used together to take advantages of both.   
 
 Dependency injection needs a dependency injection container or IoC container to make it work. A good dependency injection container should have the following features:  
 * non-invasive, use configuration instead of container api
@@ -74,10 +74,10 @@ bearcat is focused on writing small javaScripts, but building big world. The wor
 
 a quick bearcat example using dependency injection  
 
-just suppose a system needs a `car`, then the `car` must have an `engine` so that it can run, so you write the following codes:  
+just suppose a system needs a `car` , then the  `car` must have an `engine` so that it can run, so you write the following codes:  
 
 car.js
-``` js
+```js
 var Car = function() {
     this.$id = "car";
     this.$engine = null;
@@ -92,7 +92,7 @@ bearcat.module(Car, typeof module !== 'undefined' ? module : {});
 ```
 
 engine.js
-``` js
+```js
 var Engine = function() {
     this.$id = "engine";
 }
@@ -108,17 +108,17 @@ as we can see, the above codes are actually plain, old javaScript objects, the o
 
 let's see in detail about the above codes:  
 * use `$id` property to define the unique id in the IoC container
-* use `$xxId` to tell the IoC container that it needs a dependency with the id of `xxId`
+* use `$xxId` to tell the IoC container that it needs a dependency with the id of  `xxId` 
 in this example, car needs a dependency of engine so that it just add `$engine` property
 * use `bearcat.module()` to register the `module` into the IoC container  
-`typeof module !== 'undefined' ? module : {}` this code is used to be compatible with frontend and backend  
+ `typeof module !== 'undefined' ? module : {}`  this code is used to be compatible with frontend and backend  
 if you just use in the frontend, you can simply use `bearcat.module(Car);`  
-if you just use in the backend(nodejs), you can simply use `module.exports = Car;`
+if you just use in the backend(nodejs), you can simply use  `module.exports = Car;` 
 
 start the IoC container  
 
 in frontend  
-```
+```html
 <script src="./lib/bearcat.js"></script>
 <script src="./bearcat-bootstrap.js"></script>
 <script type="text/javascript">
@@ -129,15 +129,16 @@ bearcat.start(function() {
     var car = bearcat.getBean('car');
     car.run(); 
 });
+</script>
 ```
 
-use `bearcat.use(['car']);` to specify that in current page, needs the car as the main module, then bearcat will load the `car.js` script file, analyze the dependency in `car`, then it knows `car` needs a dependency of `engine`, then it asynchronously load the `engine.js` script file, and then inject the `engine` instance into the `car` instance, when all is done, fire the `bearcat.start()` callback, and in the callback, everything is ready, you can now get the `car` to run.  
+use `bearcat.use(['car']);` to specify that in current page, needs the car as the main module, then bearcat will load the `car.js` script file, analyze the dependency in `car` , then it knows  `car` needs a dependency of `engine` , then it asynchronously load the  `engine.js` script file, and then inject the `engine` instance into the `car` instance, when all is done, fire the `bearcat.start()` callback, and in the callback, everything is ready, you can now get the `car` to run.  
 
 in backend(nodejs)  
-```
+```js
 var bearcat = require('bearcat');
 var contextPath = require.resolve('./context.json');
-global.bearcat = bearcat; // make bearcat global, for `bearcat.module()`
+global.bearcat = bearcat; // make bearcat global, for  `bearcat.module()` 
 bearcat.createApp([contextPath]);
 bearcat.start(function() {
   var car = bearcat.getBean('car'); // get car
@@ -145,7 +146,7 @@ bearcat.start(function() {
 });
 ```
 
-in nodejs environment, there are no need to use `bearcat.use`, it can use synchronous require through file I/O, so just pass the `context.json` file path into the bearcat container, bearcat will do the rest things, resolve the dependencies and wire all the modules up ready for you to call.  
+in nodejs environment, there are no need to use `bearcat.use` , it can use synchronous require through file I/O, so just pass the  `context.json` file path into the bearcat container, bearcat will do the rest things, resolve the dependencies and wire all the modules up ready for you to call.  
 
 the full codes repo [10-secondes-example](https://github.com/bearcatjs/bearcat-examples/tree/master/10-seconds-example)
 
@@ -157,10 +158,10 @@ therefore, use bearcat to write application level codes and use browserify to re
 
 here comes with a simple example, a simple markdwon editor using bearcat and browserify  
 
-To make a bridge between bearcat and browserify, we need to use a module file `requireUtil`(for example)  
+To make a bridge between bearcat and browserify, we need to use a module file  `requireUtil` (for example)  
 
 requireUtil.js  
-``` js
+```js
 var RequireUtil = function() {
     this.$id = "requireUtil";
     this.$init = "init";  // enable init lifecycle hook
@@ -176,12 +177,12 @@ RequireUtil.prototype.init = function() {
 bearcat.module(RequireUtil, typeof module !== 'undefined' ? module : {});
 ```
 
-in this module script, we can use browserify provided `require` ability to resolve third-party library like `brace`, `marked` and then we should register it into the bearcat IoC container  
+in this module script, we can use browserify provided `require` ability to resolve third-party library like `brace` ,  `marked` and then we should register it into the bearcat IoC container  
 
-then in your application level codes, you can write a `markDownController`(for example)  
+then in your application level codes, you can write a  `markDownController` (for example)  
 
 markDownController.js  
-``` js
+```js
 var MarkDownController = function() {
     this.$id = "markDownController";
     this.$requireUtil = null; // requireUtil is ready for you to use

@@ -14,7 +14,7 @@ javaScript -- 目录最火热的语言, 到处发着光芒, html5, hybrid apps, 
 
 同时, nodejs也定义了一些系统内置的module方便进行开发, 比如简单的http server    
 
-``` js
+```js
 var http = require('http');
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -48,12 +48,12 @@ The Asynchronous Module Definition (AMD) API specifies a mechanism for defining 
 * 不想要使用库的全部, 要不要配置个 shim？
 * 需不需要配置个 alias ？
 
-一个库就需要问这么些个问题, 而且都是`人工手动的操作`  
+一个库就需要问这么些个问题, 而且都是 `人工手动的操作`   
 最最关键的问题是你辛辛苦苦搞定的配置项都是相对于你当前项目的  
 当你想用在其他项目或者是单元测试, 那么OK, 你还得修改一下  
 因为, 你相对的是当前项目的根路径, 一旦根路径发生改变, 一切都发生了变化  
 
-requireJS 使用之前必须配置, 同时该配置很难***重用***
+requireJS 使用之前必须配置, 同时该配置很难 ***重用*** 
 
 相比较于 CommonJS 里面如果要使用一个第三方库的话, 仅仅只需要在 package.json 里面配置一下 库名和版本号, 然后npm install一下之后就可以直接 require 使用的方式, AMD 的处理简直弱爆了 !!!
 
@@ -66,13 +66,13 @@ requireJS 使用之前必须配置, 同时该配置很难***重用***
 #### browserify
 browserify 在 github 上的 README.md 解释是：
 
-`require('modules')` in the browser
+ `require('modules')`  in the browser
 
 Use a [node](http://nodejs.org)-style `require()` to organize your browser code
 and load modules installed by [npm](https://npmjs.org).
 
 browserify will recursively analyze all the `require()` calls in your app in
-order to build a bundle you can serve up to the browser in a single `<script>`
+order to build a bundle you can serve up to the browser in a single  `<script>` 
 tag.  
 
 在 browserify 里可以编写 nodejs 一样的代码（即CommonJS以及使用package.json进行module管理）, browserify 会递归的解析依赖关系, 并把这些依赖的文件全部build成一个bundle文件, 在browser端使用则直接用 `<script>` tag 引入这个 bundle 文件即可  
@@ -98,8 +98,10 @@ component 通过 component.json 来进行依赖描述, 它的库管理是基于 
 Duo is a next-generation package manager that blends the best ideas from [Component](https://github.com/component/component), [Browserify](https://github.com/substack/node-browserify) and [Go](http://golang.org/) to make organizing and writing front-end code quick and painless.
 
 Duo 有几个特点：
+
 * 直接使用 require 使用 github 上某个 repo 的库
-``` js
+
+```js
 var uid = require('matthewmueller/uid');
 var fmt = require('yields/fmt');
 
@@ -136,10 +138,10 @@ AMD
 
 ### dependency injection
 前面提到的 javaScript 依赖管理的方式, 其实都是实现了同一种设计模式, service locator 或者说是 dependency lookup：    
-通过`显示的`调用 require(id) 来向 service locator 提供方请求依赖的 module  
+通过 `显示的` 调用 require(id) 来向 service locator 提供方请求依赖的 module  
 id 可以是路径, url, 特殊含义的字符串（duo 中的github repo）等等  
 
-相反, dependency injection 则`并没有显示的`调用, 而仅仅通过一种与 container 的约定描述来表达需要某个依赖, 然后由 container 自动完成依赖的注入, 这样, 其实是完成了 IoC（Inversion of control 控制反转）
+相反, dependency injection 则 `并没有显示的` 调用, 而仅仅通过一种与 container 的约定描述来表达需要某个依赖, 然后由 container 自动完成依赖的注入, 这样, 其实是完成了 IoC（Inversion of control 控制反转）
 
 service locator 和 dependency injection 并没有谁一定优于谁一说, 要看具体使用场景, 尤其是 javaScript 这种天生动态且是first-class的语言里, 可以简单的对比下：    
 
@@ -179,7 +181,7 @@ bearcat 并不是实现了 service locator 模式的module system, 它实现了 
 #### bearcat
 
 bearcat 的一个理念可以用下面一句话来描述：  
-`Magic, self-described javaScript objects build up elastic, maintainable front-backend javaScript applications`  
+ `Magic, self-described javaScript objects build up elastic, maintainable front-backend javaScript applications`   
 bearcat 所倡导的就是使用简单、自描述的javaScript对象来构建弹性、可维护的前后端javaScript应用  
 
 当然可能有人会说, javaScript里面不仅仅是对象, 还可以函数式、元编程什么的, 其实也是要看应用场景的, bearcat更适合的场景是一个多人协作的、需要持续维护的系统（应用）, 如果是快速开发的脚本、工具、库, 那么则该怎么简单、怎么方便, 就怎么来  
@@ -189,29 +191,30 @@ bearcat 所倡导的就是使用简单、自描述的javaScript对象来构建�
 假如有一个应用, 需要有一辆car, 同时car必须要有engine才能发动, 那么car就依赖了engine, 在bearcat的 dependency injection container 下, 仅仅如下编写代码即可：  
 
 car.js
-``` js
+```js
 var Car = function() {
     this.$id = "car";
     this.$engine = null;
-}
+};
   
 Car.prototype.run = function() { 
     this.$engine.run(); 
     console.log('run car...');
-}
+};
   
 bearcat.module(Car, typeof module !== 'undefined' ? module : {});
 ```
 
 engine.js
-``` js
+
+```js
 var Engine = function() {
     this.$id = "engine";
-}
+};
   
 Engine.prototype.run = function() {
     console.log('run engine...');
-}
+};
   
 bearcat.module(Engine, typeof module !== 'undefined' ? module : {});
 ```
@@ -219,13 +222,14 @@ bearcat.module(Engine, typeof module !== 'undefined' ? module : {});
 * 通过 `this.$id` 来定义该module在bearcat container里的全局唯一id
 * 通过 `$Id` 属性来描述依赖, 在car里就描述了需要id为 engine的一个依赖
 * 通过 bearcat.module(Function) 来把module注册到bearcat container中去
-`typeof module !== 'undefined' ? module : {}`  
+ `typeof module !== 'undefined' ? module : {}`   
 这一段是为了与 CommonJS（nodejs） 下进行兼容, 在nodejs里由于有同步require, 则无需向在浏览器环境下进行异步加载
 
 启动bearcat容器, 整体跑起来  
 
-浏览器环境  
-```
+浏览器环境
+
+```html
 <script src="./lib/bearcat.js"></script>
 <script src="./bearcat-bootstrap.js"></script>
 <script type="text/javascript">
@@ -238,13 +242,13 @@ bearcat.start(function() {
 });
 ```
 
-`bearcat.use(['car'])` 表面当前页面需要使用 car, bearcat然后就会加载car.js, 然后解析car里面的依赖, 知道需要engine, 然后加载engine.js脚本, 加载完之后, 再把engine实例化注入到car中, 最后调用`bearcat.start`的回调完成整个容器的启动
+ `bearcat.use(['car'])`  表面当前页面需要使用 car, bearcat然后就会加载car.js, 然后解析car里面的依赖, 知道需要engine, 然后加载engine.js脚本, 加载完之后, 再把engine实例化注入到car中, 最后调用 `bearcat.start` 的回调完成整个容器的启动
 
 nodejs 环境  
-``` js
+```js
 var bearcat = require('bearcat');
 var contextPath = require.resolve('./context.json');
-global.bearcat = bearcat; // make bearcat global, for `bearcat.module()`
+global.bearcat = bearcat; // make bearcat global, for  `bearcat.module()` 
 bearcat.createApp([contextPath]);
 bearcat.start(function() {
   var car = bearcat.getBean('car'); // get car
@@ -252,7 +256,7 @@ bearcat.start(function() {
 });
 ```
 
-nodejs 环境下启动, 则不需用`bearcat.use`了, 直接把 `context.json`的路径传递给bearcat即可, bearcat会扫描`context.json`里面配置着的扫描路径, 该路径下的所有js文件都会被扫描, 合理的module都会注册到bearcat中, 然后实例化, 注入  
+nodejs 环境下启动, 则不需用 `bearcat.use` 了, 直接把  `context.json` 的路径传递给bearcat即可, bearcat会扫描 `context.json` 里面配置着的扫描路径, 该路径下的所有js文件都会被扫描, 合理的module都会注册到bearcat中, 然后实例化, 注入  
 
 完整源码 [10-secondes-example](https://github.com/bearcatjs/bearcat-examples/tree/master/10-seconds-example)
 
@@ -265,12 +269,12 @@ bearcat + browserify 会是一个不错的组合
 
 一个例子, 基于 bearcat + browserify 的 markdwon-editor  
 
-bearcat 与 browserify 之间通过一个`requireUtil`（比如）的module来进行连接
+bearcat 与 browserify 之间通过一个 `requireUtil` （比如）的module来进行连接
 
 在这个 `requireUtil` 可以使用 browserify 的 require, 用这个 require 来引入第三方库, 比如marked库  
 
 requireUtil.js
-``` js
+```js
 var RequireUtil = function() {
     this.$id = "requireUtil";
     this.$init = "init";
@@ -286,10 +290,10 @@ RequireUtil.prototype.init = function() {
 bearcat.module(RequireUtil, typeof module !== 'undefined' ? module : {});
 ```
 
-然后在你的业务层代码上, 注入这个 `requireUtil`来使用 browserify 引入的第三方库  
+然后在你的业务层代码上, 注入这个  `requireUtil` 来使用 browserify 引入的第三方库  
 
 markDownController.js
-``` js
+```js
 var MarkDownController = function() {
     this.$id = "markDownController";
     this.$requireUtil = null; // requireUtil is ready for you to use

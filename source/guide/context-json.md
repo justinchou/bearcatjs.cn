@@ -18,8 +18,8 @@ context.json是Bearcat需要的唯一的配置文件
 
 Bearcat中, 指定了namespace之后, 使用依赖注入或者getBean方法时, 需要加上namespace属性: 
 
-```
-namespace: "namespace name"
+```json
+{"namespace": "namespace name"}
 ```
 
 * beans: 指定beans的meta数据, 定义容器中被管理的bean, 是一个[bean meta数据](/guide/magic-javaScript-objects-in-details.html#Bean_attribute)组成的数组.

@@ -24,11 +24,11 @@ Bearcat的前端依赖管理是异步加载的, AMD将使你着迷, 每个页面
 JavaScript对象可以魔法化, 不仅仅包含属性和方法, 还可以包含DSL或者句法糖. Bearcat中, 使用'$'定义句法糖. 
 
 ```js
-    var MagicJsObject = function() {
-      this.$id = "magicJsObject";
-    };
-      
-    MagicJsObject.prototype.doMethod = function() {};
+var MagicJsObject = function() {
+  this.$id = "magicJsObject";
+};
+  
+MagicJsObject.prototype.doMethod = function() {};
 ```
 
 这就是一个含有'$'开头属性的简单的对象.
@@ -53,59 +53,59 @@ Node.js开发中, 设置不同的环境是很普遍的事情, 比如development,
 
 ## 一个栗子🌰
 
-编写简单的JavaScript对象, 将这些对象的文件放在文件夹`app`中, 用于被bearcat扫描.
+编写简单的JavaScript对象, 将这些对象的文件放在文件夹 `app` 中, 用于被bearcat扫描.
 
 car.js  
-``` js
+```js
 var Car = function() {
   this.$id = "car";
   this.$wheel = null;
   this.$engine = null;
-}  
-  
+};
+
 Car.prototype.run = function() {
   this.$wheel.run();
   this.$engine.run();
   console.log('run car...');
-}  
-  
+};
+
 bearcat.module(Car, typeof module !== 'undefined' ? module : {});
 ```
 
 engine.js
-``` js
+```js
 var Engine = function() {
   this.$id = "engine";
-}  
-  
+};
+
 Engine.prototype.run = function() {
   console.log('run engine...');
-}  
-  
+};
+
 bearcat.module(Engine, typeof module !== 'undefined' ? module : {});
 ```
 
 wheel.js
-``` js
+```js
 var Wheel = function() {
   this.$id = "wheel";
-}  
-  
+};
+
 Wheel.prototype.run = function() {
   console.log('run wheel...');
-}  
-  
+};
+
 bearcat.module(Wheel, typeof module !== 'undefined' ? module : {});
 ```
 
-上面的代码car依赖于engine和wheel, car使用`this.$wheel`来依赖wheel, `this.$engine`来依赖engine.
+上面的代码car依赖于engine和wheel, car使用 `this.$wheel` 来依赖wheel,  `this.$engine` 来依赖engine.
 
-使用`bearcat.module`将以上所有代码注册到bearcat中, 前后端通用.
+使用 `bearcat.module` 将以上所有代码注册到bearcat中, 前后端通用.
 
-然后添加简单的`context.json`文件来指定bearcat的扫码目录:
+然后添加简单的 `context.json` 文件来指定bearcat的扫码目录:
 
 context.json  
-``` json
+```json
 {
   "name": "bearcat-simple-example",
   "scan": ["app"]
@@ -115,8 +115,10 @@ context.json
 将程序打包, 运行起来吧!
 
 ### 在前段浏览器使用
+
 index.html
-```
+
+```html
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
@@ -141,17 +143,18 @@ index.html
 </html>
 ```
 
-`bearcat-bootstrap.js`是自动生成的, 这个文件自动异步加载需要加载的JavaScript代码, 更详尽的内容请参考 [bearcat-bootstrap.js 部分](/guide/bearcat-bootstrap.html)
+ `bearcat-bootstrap.js` 是自动生成的, 这个文件自动异步加载需要加载的JavaScript代码, 更详尽的内容请参考 [bearcat-bootstrap.js 部分](/guide/bearcat-bootstrap.html)
 
 ### 在后端nodejs服务器使用
 
 app.js
-```
+
+```js
 var bearcat = require('bearcat');
 
 var contextPath = require.resolve('./context.json');
 
-global.bearcat = bearcat; // make bearcat global, for `bearcat.module()`
+global.bearcat = bearcat; // make bearcat global, for  `bearcat.module()` 
 bearcat.createApp([contextPath]);
 
 bearcat.start(function() {

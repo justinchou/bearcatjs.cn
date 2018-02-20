@@ -26,7 +26,7 @@ advice 的类型:
 * After throwing advice: 切入逻辑执行当切入的方法抛出了异常
 * Around advice: 横切逻辑在切入点周围执行, 比如在一个方法执行的开始和结束. 这是最强大的一种横切逻辑. around advice 可以完成在方法执行的开始和结束做些自定义操作. 它可以决定是选择执行切入点的逻辑或者直接返回横切逻辑的结果通过return或者抛出异常来.
 
-Bearcat 支持 ***Before advice***, ***After returning advice*** 和 ***Around advice***, 因为抛出异常并不是很好的实践在Node.js中.
+Bearcat 支持 ***Before advice*** ,  ***After returning advice*** 和  ***Around advice*** , 因为抛出异常并不是很好的实践在Node.js中.
 
 ## 声明一个aspect
 
@@ -37,13 +37,13 @@ Bearcat 支持 ***Before advice***, ***After returning advice*** 和 ***Around a
 advice 就是aspect中的一个函数, advice 函数的最后一个参数必须是 ***next*** 回调函数用以告知AOP框架当前advice执行的结束.
 在元数据配置中, 你可以使用 advice 属性来表面当前 ***advice*** 中的advice的名字.
    
-```
-"advice": "doBefore"
+```json
+{"advice": "doBefore"}
 ```
 
 ### Before advice
 
-``` js
+```js
 Aspect.prototype.doBefore = function(next) {
     console.log('Aspect doBefore');
     next();
@@ -55,7 +55,7 @@ Aspect.prototype.doBefore = function(next) {
 after advice 在Bearcat中等同于 after returning advice.
 切入点方法执行回调的结果参数会传递给after advice方法.
 
-``` js
+```js
 Aspect.prototype.doAfter = function(err, r, next) {
     console.log('Aspect doAfter ' + r);
     next();
@@ -66,7 +66,7 @@ Aspect.prototype.doAfter = function(err, r, next) {
 
 在around advice中, target对象和target方法会以参数的方式传递给around advice.
 
-``` js
+```js
 Aspect.prototype.doAround = function(target, method, next) {
     console.log('Aspect doAround before');
     target[method](function(err, r) {
@@ -81,44 +81,45 @@ Aspect.prototype.doAround = function(target, method, next) {
 pointcuts 决定了感兴趣的join points切入点, 也因此控制着什么时候advice会被执行. 在Bearcat中, 一个pointcut声明有两个部分: 一个prefix前缀声明advice的类型, 一个pointcut表达式用于描述所感兴趣的目标方法.
 在元数据配置中Pointcut通过 ***pointcut*** 属性来进行描述.
 
-```
-"pointcut": "before:.*?runBefore"
+```json
+{"pointcut": "before:.*?runBefore"}
 ```
 
-前缀必须是 ***before***, ***after*** 和 ***around***, 对应于before advice, after advice和around advice.
+前缀必须是 ***before*** ,  ***after*** 和  ***around*** , 对应于before advice, after advice和around advice.
 
 在prefix之后则是一个 ***:*** 分隔符.
 
 在分隔符之后, 则是一个pointcut表达式用于描述匹配目标方法
+
 pointcut 表达式事实上就是一个简单的正则表达式
-目标方法有下面这样的唯一特征:
-```
-id.method
-```
-***id*** 是目标bean的唯一id 
 
-***method*** 是目标对象的方法名
+目标方法有下面这样的唯一特征: `id.method`
 
-因此, 如果目标对象以id为 ***car*** 为名, 并且有一个方法名叫 ***runBefore***
+***id*** 是目标bean的唯一id , ***method*** 是目标对象的方法名
+
+因此, 如果目标对象以id为 ***car*** 为名, 并且有一个方法名叫  ***runBefore*** 
+
 下面的pointcut表达式就会匹配到该目标方法:
 
-```
-"pointcut": "before:.*?runBefore"
+```json
+{"pointcut": "before:.*?runBefore"}
 ```
 
 ## 运行时(runtime)支持
 
 当一个advice被定义为runtime, 目标方法的调用参数就会被传递给该advice.
-***before advice*** 和 ***around advice*** 可以被定义成为runtime, 而 ***after advice*** 本身就是runtime的.
+
+ ***before advice*** 和 ***around advice*** 可以被定义成为runtime, 而 ***after advice*** 本身就是runtime的.
+
 要使用这个特性, 你可以通过 ***runtime*** 属性, 并且设置它为true
 
-```
-"runtime": true
+```json
+{"runtime": true}
 ```
 
 ### before advice (runtime)
 
-``` js
+```js
 Aspect.prototype.doBeforeRuntime = function(num, next) {
     console.log('Aspect doBeforeRuntime ' + num);
     next();
@@ -127,7 +128,7 @@ Aspect.prototype.doBeforeRuntime = function(num, next) {
 
 ### around advice (runtime)
 
-``` js
+```js
 Aspect.prototype.doAroundRuntime = function(target, method, num, next) {
     console.log('Aspect doAroundRuntime before ' + num);
     target[method](num, function(err, r) {
@@ -143,30 +144,30 @@ Aspect.prototype.doAroundRuntime = function(target, method, num, next) {
 
 Aspect 也是一个bean, 要使得AOP配置支持$注解形式, 需要在构造函数内配置
 
-```
+```js
 this.$aop = true;
 ```
   
 Aspect 的 prototype 中的每一个方法都可能成为 advice, 成为 advice 则只需要在里面声明
 
-```
+```js
 var $pointcut = "pointcut expression";
 ```
 
 除了声明 pointcut 之外, order, runtime 也可以同样的方式声明
 
-```
+```js
 var $order = 1;
 var $runtime = true;
 ```
 
 一个简单的例子
 
-``` js
+```js
 var Aspect = function() {
     this.$id = "aspect";
     this.$aop = true;
-}
+};
   
 Aspect.prototype.doBefore = function(next) {
     var $pointcut = "before:.*?runBefore";
@@ -174,7 +175,7 @@ Aspect.prototype.doBefore = function(next) {
 
     console.log('Aspect doBefore');
     next();
-}
+};
   
 module.exports = Aspect;
 ```

@@ -5,18 +5,18 @@ order: 15
 
 ## 为什么命名为熊猫
 
-熊猫这个名字好记, 当然也叫`panda`, 是中国的国宝, 也寓意人虽小却能做大事.
+熊猫这个名字好记, 当然也叫 `panda` , 是中国的国宝, 也寓意人虽小却能做大事.
 
 
 ## Bearcat是创建了一套新的模块系统么
 
-Bearcat提供的是依赖注入, 而不是新的模块系统. 依赖注入其实是基于模块系统的, 但是模块系统使用`require`,`exports`这样的语句去管理依赖, 模块可以是任何一个合法的JavaScript.
+Bearcat提供的是依赖注入, 而不是新的模块系统. 依赖注入其实是基于模块系统的, 但是模块系统使用 `require` , `exports` 这样的语句去管理依赖, 模块可以是任何一个合法的JavaScript.
 
 依赖注入(DI)是一个程序凭借对象自己来定义自己依赖哪些其他对象来完成工作, 实现依赖注入只需要给构造方法或者工厂方法传递参数, 或者在通过构造方法或工厂方法实例化之后设置属性值, 就可以获取到依赖的对象. 容器在创建bean的时候将这些依赖注入其中.
 
 Bearcat的基础核心是bean自身来控制所依赖的对象的位置和初始化流程, 而不再是通过指定文件位置(require)和手动初始化(new)对象, 因此称之为控制反转(IoC).
 
-因此, 可以使用Bearcat于其他模块系统(例如`browserify`)一起使用.
+因此, 可以使用Bearcat于其他模块系统(例如 `browserify` )一起使用.
 
 
 ## 元数据配置 func 疑惑
@@ -43,7 +43,7 @@ Bearcat的基础核心是bean自身来控制所依赖的对象的位置和初始
 
 但是我看了这个官方的例子又疑惑了：
 
-```
+```js
 module.exports = function(app) {
     var bearcat = app.get('bearcat');
     return bearcat.getBean({
@@ -73,7 +73,7 @@ var Handler = function(app) {
 
 这样做的一个比较显著的好处就是便于单元测试，可以方便的mock对象，并且无缝的切换
 
-```
+```js
 var userService = require('../service/user-service');
 
 exports.allUsers = function (req, res, next) {
@@ -88,7 +88,7 @@ exports.allUsers = function (req, res, next) {
 
 你这里要对controller进行单元测试，需要userService的一个mock对象，这里你是直接require的，这时你必须要么修改userService的代码，要么就是修改userController的代码，比如这样：
 
-```
+```js
 //var userService = require('../service/user-service');
 var userService = require('../service/mock-user-service');
 
@@ -110,24 +110,24 @@ exports.allUsers = function (req, res, next) {
 
 没有能直接加载json功能吗, 比如
 
-```
-var code = {OK: 200, FAIL: 500}
+```js
+var code = {OK: 200, FAIL: 500};
 module.exports = code;
 ```
 
-不想按例子里要写成 `var code = function() {this.OK = 200}`, 因为这些code可能在客户端里也要
+不想按例子里要写成  `var code = function() {this.OK = 200}` , 因为这些code可能在客户端里也要
 
 ### 答
 
 bearcat 里面要求的是有构造函数的，不能直接这样子用匿名对象的
 
-```
+```js
 var codeUtil = function() {
   this.code = {
     OK: 200,
     FAIL: 500
-  }
-}
+  };
+};
 
 module.exports = codeUtil;
 ```

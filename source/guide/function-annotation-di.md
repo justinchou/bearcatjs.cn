@@ -13,13 +13,13 @@ order: 7
 
 car.js
 
-```
-var Car = function() {}
+```js
+var Car = function() {};
 
 Car.prototype.run = function() {
 	console.log('run car...');
 	return 'car';
-}
+};
 
 // func is the constructor function
 module.exports = {
@@ -42,50 +42,50 @@ module.exports = {
 
 car.js
 
-```
+```js
 var Car = function($engine) {
 	this.$id = "car";
 	this.$scope = "prototype";
 	this.$engine = $engine;
 	this.$wheel = null;
-}
+};
 
 Car.prototype.run = function() {
 	this.$engine.run();
 	var res = this.$wheel.run();
 	console.log('run car...');
 	return 'car ' + res;
-}
+};
 
 module.exports = Car;
 ```
 
 engine.js
 
-```
+```js
 var Engine = function() {
-   	this.$id = "engine";
-   }
-   
-   Engine.prototype.run = function() {
-   	console.log('run engine...');
-   	return 'engine';
-   }
-   
-   module.exports = Engine;
+    this.$id = "engine";
+};
+
+Engine.prototype.run = function() {
+    console.log('run engine...');
+    return 'engine';
+};
+
+module.exports = Engine;
 ```
 
 wheel.js
 
-```
+```js
 var Wheel = function() {
 	this.$id = "wheel";
-}
+};
 
 Wheel.prototype.run = function() {
 	console.log('run wheel...');
 	return 'wheel';
-}
+};
 
 module.exports = Wheel;
 ```

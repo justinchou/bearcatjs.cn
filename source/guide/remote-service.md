@@ -13,13 +13,13 @@ Bearcat-remote 提供了 rpc remote 支持, 封装了 Bearcat and rpc 库比如 
 
 ## 安装
 
-```
+```bash
 npm install bearcat-remote --save
 ```
 
 ## 添加 context.json 元数据配置
 
-```
+```json
 {
 	"name": "bearcat-remote",
 	"dependencies": {
@@ -36,18 +36,18 @@ npm install bearcat-remote --save
 
 remoteService.js
 
-```
+```js
 var remoteService = function() {
 
 }
 remoteService.prototype.remotePing = function(ping, cb) {
 	console.log(ping);
 	cb('pong');
-}
+};
 module.exports = remoteService;
 ```
 
-```
+```json
 {
 	"id": "remoteService",
 	"func": "remoteService"
@@ -56,7 +56,7 @@ module.exports = remoteService;
 
 * 接下来, 我们通过 dnodeServiceExporter 来导出service为remote
 
-```
+```json
 {
 	"id": "dnodeServiceExporter",
 	"func": "node_modules.bearcat-remote.lib.remote.dnode.dnodeServiceExporter",
@@ -75,7 +75,7 @@ module.exports = remoteService;
 
 * 客户端连接remote service 使用dnodeDynamicProxy设置客户端代理来连接remote service:
 
-```
+```json
 {
 	"id": "dnodeClient",
 	"func": "node_modules.bearcat-remote.lib.remote.dnode.dnodeDynamicProxy",
@@ -97,7 +97,7 @@ module.exports = remoteService;
 
 ### 启动 Bearcat 跑起来
 
-```
+```js
 var Bearcat = require('bearcat');
 
 var simplepath = require.resolve('./context.json');

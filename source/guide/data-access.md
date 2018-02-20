@@ -26,11 +26,11 @@ Bearcat-dao 是一个 O/R mapping dao 框架, 为[node.js](http://nodejs.org/)�
 
 Domain 是一个 POJO, 描述了表和对象之间的关系
 
-```
+```js
 var simpleDomain = function() {
 	this.id = 0;
 	this.name = null;
-}
+};
 
 module.exports = {
 	func: Domain,
@@ -40,7 +40,7 @@ module.exports = {
 	}],
 	fields: ["name"],
 	tableName: "test"
-}
+};
 ```
 
 详细说来:
@@ -59,8 +59,8 @@ module.exports = {
     
 修改项目中的context.json [placeholds](/guide/consistent-configuration.html) 可以很方便的在不同环境间切换.
 
-```
-"dependencies": {
+```json
+{"dependencies": {
     "bearcat-dao": "*"
 },
 "beans": [{
@@ -82,7 +82,7 @@ module.exports = {
         "name": "database",
         "value": "${mysql.database}"
     }]
-}, {
+  }, {
     "id": "redisConnectionManager",
     "func": "node_modules.bearcat-dao.lib.connection.cache.redisConnectionManager",
     "props": [{
@@ -92,7 +92,7 @@ module.exports = {
         "name": "host",
         "value": "${redis.host}"
     }]
-}]
+}]}
 ```
 
 如果你不需要使用redis, 你可以移除 ***redisConnectionManager*** 定义
@@ -108,23 +108,23 @@ Bearcat-dao 提供了封装基本sql和cache操作的 domainDaoSupport
 
 simpleDao.js
 
-```
+```js
 var SimpleDomain = require('simpleDomain');
 var SimpleDao = function() {
 	this.domainDaoSupport = null;
-}
+};
 
 SimpleDao.prototype.init = function() {
 	// init with SimpleDomain to set up O/R mapping
 	this.domainDaoSupport.initConfig(SimpleDomain);
-}
+};
 
 // query list all
 // callback return mapped SimpleDomain array results
 SimpleDao.prototype.getList = function(cb) {
 	var sql = ' 1 = 1';
 	return this.domainDaoSupport.getListByWhere(sql, null, null, cb);
-}
+};
 
 module.exports = {
 	id: "simpleDao",
@@ -134,7 +134,7 @@ module.exports = {
 		ref: "domainDaoSupport"
 	}],
 	"init": "init"
-}
+};
 ```
 
 详细的 api 文档在 [domainDaoSupport](http://bearcatnode.github.io/bearcat-dao/domainDaoSupport.js.html)
@@ -147,14 +147,14 @@ Bearcat-dao 基于 [Bearcat AOP]() 提供了事务支持. aspect 是 [transactio
 
 pointcut 定义的是:
 
-```
-"pointcut": "around:.*?Transaction"
+```json
+{"pointcut": "around:.*?Transaction"}
 ```
 
 因此, 任何已 ***Transaction*** 结尾的POJO中的方法都会匹配到 transaction 事务
 由于transaction必须在同一个connection中, 在 Bearcat-dao 中是通过 ***transactionStatus*** 来保证的, 在同一个事务的 transaction 必须在同一个transactionStatus中
 
-```
+```js
 SimpleService.prototype.testMethodTransaction = function(cb, txStatus) {
 	var self = this;
 	this.simpleDao.transaction(txStatus).addPerson(['aaa'], function(err, results) {
@@ -185,13 +185,13 @@ SimpleService.prototype.testMethodTransaction = function(cb, txStatus) {
 
 更新 package.json
 
-```
+```bash
 npm install pomelo-sync-plugin --save
 ```
 
 更新 app.js
 
-```
+```js
 var sync = require('pomelo-sync-plugin');
 app.use(sync, {sync: {path:__dirname + '/app/dao/mapping', dbclient: {}}});
 ```
@@ -202,7 +202,7 @@ app.use(sync, {sync: {path:__dirname + '/app/dao/mapping', dbclient: {}}});
 
 helloSync.js
 
-```
+```js
 var bearcat = require('bearcat');
 var helloSync = {};
 
@@ -216,7 +216,7 @@ helloSync.hello = function(dbclient, val, cb) {
 
 添加 pomelo-sync exec 调用
 
-```
+```js
 app.get('sync').exec('helloSync.hello', helloObj.id, helloObj);	
 ```
 
@@ -232,7 +232,7 @@ app.get('sync').exec('helloSync.hello', helloObj.id, helloObj);
 
 跑node应用时带上BEARCAT_DEBUG为true
 
-```
+```bash
 BEARCAT_DEBUG=true node xxx.js
 ```
 

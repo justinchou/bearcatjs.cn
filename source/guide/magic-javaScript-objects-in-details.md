@@ -11,43 +11,45 @@ order: 6
 
 Bearcat中, 建议将配置meta数据写成自描述的JavaScript魔法对象. 然而, 由于一些历史原因, 可以写成像context.json一样的JSON格式的配置文件, 也可以在代码文件中写成简单的JavaScript对象.
 
-唯一的区别在于基于代码的meta标签的***func***属性, 必须是一个通过bean定义的***Function***构造方法; 然而配置文件的meta标签的***func***属性, 是一个包含构造方法js文件的***String***类型的路径.
+唯一的区别在于基于代码的meta标签的 ***func*** 属性, 必须是一个通过bean定义的 ***Function*** 构造方法; 然而配置文件的meta标签的 ***func*** 属性, 是一个包含构造方法js文件的 ***String*** 类型的路径.
 
 ### JavaScript魔法对象
   
 car.js 
-``` js
+```js
 var Car = function() {
     this.$id = "car";  // id car
-}
+};
   
 Car.prototype.run = function() {
     console.log('run car...');
     return 'car';
-}
-  
+};
+
 module.exports = Car;
 ```
 
 context.json
 
-```
+```json
 {
     "name": "simple",
     "scan": "app"
 }
 ```
 
+详情请参考[$命名的变量依赖注入](/guide/)
+
 ### 基于代码的meta标签
 
 car.js
-``` js
-var Car = function() {}
+```js
+var Car = function() {};
 
 Car.prototype.run = function() {
     console.log('run car...');
     return 'car';
-}
+};
 
 // func is the constructor function
 module.exports = {
@@ -59,7 +61,7 @@ module.exports = {
 ### 基于外部配置的meta标签
 
 car.js  
-``` js
+```js
 var Car = function() {}
 
 Car.prototype.run = function() {
@@ -71,7 +73,7 @@ module.exports = Car;
 ```
 
 context.json
-``` js
+```js
 {
     "name": "simple",
     "beans": [{
@@ -101,13 +103,13 @@ Bean属性被解析成 [BeanDefinition](https://github.com/bearcatjs/bearcat/blo
 * lazy: 指定当前bean是否不需要提前初始化, 而是在首次调用时初始化. 默认false表示启动时初始化.  
 * args: 依赖注入参数, 是一个数组, 所有的数组元素将被解析成 [BeanWrapper](https://github.com/bearcatjs/bearcat/blob/master/lib/beans/support/beanWrapper.js) 对象, 该对象有如下属性  
   - name: 被依赖注入的元素名  
-  - type: 当指定type值时, 标记为属性依赖注入, 可以将属性通过参数传给***getBean***完成注入.  
+  - type: 当指定type值时, 标记为属性依赖注入, 可以将属性通过参数传给 ***getBean*** 完成注入.  
   - value: 将被注入的值
   - ref: 当前容器中被注入bean的名字
 * props: 依赖注入属性, 与args相同
 * factoryArgs: 工厂依赖注入参数, 与args相同    
 * proxy: 指定当前bean是否需要被代理, 默认true. 当bean需要被AOP切面拦截的时候, proxy代理是必须的. 当bean是基础构造的则无需设置代理.    
-* aop: 指定bean是切面***aspect***, 是一个数组, 数组对象有以下属性  
+* aop: 指定bean是切面 ***aspect*** , 是一个数组, 数组对象有以下属性  
   - pointcut: 定义切入点表达式
   - advice: 当符合切入点时, 执行的切入函数
   - runtime: 设置为true来指定将被切入函数的参数传入切入函数中

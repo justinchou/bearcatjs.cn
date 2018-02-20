@@ -31,7 +31,7 @@ Bearcat 支持 ***Before advice*** ,  ***After returning advice*** 和  ***Aroun
 ## 声明一个aspect
 
 在Bearcat, 一个aspect也是一个简单的POJO, 它同在Bearcat中管理的其它POJOs一样, 因此你可以相当容易的往aspect中注入其它的beans.
-在一个aspect中, 你必须定义advices, 可以参考 [声明一个advice](#Declaring_an_advice)  
+在一个aspect中, 你必须定义advices, 可以参考 [声明一个advice](#声明一个advice)  
 
 ## 声明一个advice
 advice 就是aspect中的一个函数, advice 函数的最后一个参数必须是 ***next*** 回调函数用以告知AOP框架当前advice执行的结束.
@@ -124,7 +124,7 @@ Aspect.prototype.doBeforeRuntime = function(num, next) {
     console.log('Aspect doBeforeRuntime ' + num);
     next();
 }
-``` 
+```
 
 ### around advice (runtime)
 

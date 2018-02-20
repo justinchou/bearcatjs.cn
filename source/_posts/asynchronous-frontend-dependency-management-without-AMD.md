@@ -185,7 +185,7 @@ RequireUtil.prototype.init = function() {
 }
   
 bearcat.module(RequireUtil, typeof module !== 'undefined' ? module : {});
-``` 
+```
 
 write our main javaScript object named with  `testJquery` , it has the dependency of  `requireUtil` .  
 

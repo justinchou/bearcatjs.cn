@@ -17,7 +17,7 @@ order: 1
 
 ### NPM - 使用 [browserify](https://github.com/substack/node-browserify)
 
-``` bash
+```bash
 $ npm install bearcat
 ```
 
@@ -27,13 +27,13 @@ var bearcat = require('bearcat');
 
 ### Bower
 
-``` bash
+```bash
 $ bower install bearcat
 ```
 
 ## 服务器 - nodejs
 
-``` bash
+```bash
 $ npm install bearcat
 ```
 

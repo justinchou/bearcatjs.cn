@@ -22,7 +22,7 @@ Bearcat中, 指定了namespace之后, 使用依赖注入或者getBean方法时, 
 {"namespace": "namespace name"}
 ```
 
-* beans: 指定beans的meta数据, 定义容器中被管理的bean, 是一个[bean meta数据](/guide/magic-javaScript-objects-in-details.html#Bean_attribute)组成的数组.
+* beans: 指定beans的meta数据, 定义容器中被管理的bean, 是一个[bean meta数据](/guide/magic-javaScript-objects-in-details.html#Bean_属性)组成的数组.
 * dependencies: 标识在依赖的子模块中有需要被容器管理的beans  
 
 

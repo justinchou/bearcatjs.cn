@@ -11,7 +11,7 @@ bearcat-bootstrap.js 文件是自动生成的, 无需手写.
 
 ```bash
 npm install -g bearcat
-
+# or
 yarn add -G bearcat
 ```
 
@@ -23,7 +23,7 @@ bearcat generate
 
 可以通过script标签, browerify的require方法, 或者amd的define方法来加载该文件.  
 
-``` html
+```html
 <script src="bearcat-bootstrap.js"></script>
 ```
 

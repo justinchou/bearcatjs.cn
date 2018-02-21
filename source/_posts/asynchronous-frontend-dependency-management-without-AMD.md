@@ -8,16 +8,20 @@ Frontend dependency management is always the discussion point, people have a lot
 
 For years ago, developers used to use `<script>` tag to write code, however when the page codes grows, the maintainability will be harder and harder. Then, with the arise of [nodejs](http://nodejs.org/), [CommonJS](http://wiki.commonjs.org/wiki/CommonJS) brings up using `require` ,  `exports` to resolve modules. It seems really nice when using in nodejs, however, when it meets browser, it works not quite well. The reason is simply that browser does not support synchronous  `require` , it can not load a script from file I/O. Then [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) comes up a specification used well for browser, as the AMD says:  
 
-<!-- more -->
-
 {% blockquote %}
 The Asynchronous Module Definition (AMD) API specifies a mechanism for defining modules such that the module and its dependencies can be asynchronously loaded. This is particularly well suited for the browser environment where synchronous loading of modules incurs performance, usability, debugging, and cross-domain access problems.
 {% endblockquote %}
 
 AMD has two main concerns:  
+
+<!-- more -->
+
 ### asynchronous loading script
+
 this works well in browser, and fascinates developers a lot, developers write modular scripts in different files, different modules can be dependent with some others, which makes codes resuable, moreover debug and edit files are quite simple and smooth.  
+
 ### use `define` to define a module and its dependecies
+
 to use AMD, the module must use `define` which really makes developers messy.  
 when using AMD, it is easy to run into the following road-blocks:  
 - want to use Libray X, does it suport AMD ?  

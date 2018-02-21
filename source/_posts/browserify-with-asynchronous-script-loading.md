@@ -7,13 +7,15 @@ comments: true
 
 [browserify](https://github.com/substack/node-browserify) is a great project that makes npm everywhere.  
 
- `Browserify lets you require('modules') in the browser by bundling up all of your dependencies.`   
+Browserify lets you require('modules') in the browser by bundling up all of your dependencies.   
 
 It is really cool since developers can now use modules from npm which is growing extremely fast, more and more front-end libraries, tools, frameworks are now supporting npm, it is a great advantage. browserify makes it real for front-end developers to use npm modules without much pains.  
 
 browserify uses the same module system as node, it is called [node-flavored](http://nodejs.org/docs/latest/api/modules.html) CommonJS modules. It uses `require` ,  `exports` to organize modules, and uses `package.json` ,  `node_modules` to make module reuseable.  
 
 therefore, you write node-style modular codes, you can test in node, then if you want to use in the browser, you bundle it through `browserify` command：  
+
+<!-- more -->
 
 ```bash
 browserify hello.js > bundle.js
@@ -30,8 +32,6 @@ now `bundle.js` contains all the javascript that `hello.js` needs to work. To us
 ```
 
 as you see, browserify bundles all modular codes in a build process, then it uses the final bundle file, not your original source codes. So when `bundle.js` file loaded in the browser, all your modular codes are loaded and mapped so that node-style CommonJS `require` can be worked in the browser. The build process that is always needed, is a problem that not only browserify faces, other browser CommonJS module system(like component, duo, webpack) also faces. 
-
-<!-- more -->
 
 ## browserify problems
 All problems browserify faces come from the annoying  `build process` , it is not exist in nodejs environment, however when in browser environment it is a must to make CommonJS work.  

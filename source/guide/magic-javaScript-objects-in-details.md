@@ -96,7 +96,7 @@ Bean属性被解析成 [BeanDefinition](https://github.com/bearcatjs/bearcat/blo
 * destroy: 容器优雅的关闭后调用的方法, 可以在此销毁单例beans  
 * factoryBean: bean实例化时用的工厂类  
 * factoryMethod: bean实例化时用的工程类中的方法  
-* scope: 可以是 [singleton(单例)](/guide/dependency-injection.html#单例_scope) 或 [prototype(原型)](/guide/dependency-injection.html#The_prototype_scope), 默认是单例.  
+* scope: 可以是 [singleton(单例)](/guide/dependency-injection.html#单例_Scope) 或 [prototype(原型)](/guide/dependency-injection.html#The_prototype_scope), 默认是单例.  
 * async: 指定init方法是否是异步, 默认false同步  
 * abstract: 指定本bean是否是抽象的, 不需要被实例化, 默认false非抽象.   
 * parent: 指定bean的继承关系, 子bean将继承父bean中子bean没有的prototype方法, 值为父bean的id.   

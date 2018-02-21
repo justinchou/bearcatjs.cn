@@ -7,10 +7,7 @@ order: 3
 
 控制反转(IoC)是一个设计模式, 记录组件的依赖、配置与生命周期. 控制反转是好莱坞原则'别找我, 直到我找你'的最佳实践. Bearcat中IoC的实现基于依赖注入(DI), 组件依赖不是通过查找实现, 而是在容器中通过简单的配置来解析依赖. 容器为组织组件全权负责, 向JavaScript对象属性值或者构造方法提供构造好的依赖对象. Bearcat使用基础的 ***beanFactory*** 和高级的 ***applicationContext*** 来实现容器.
 
-## 配置标记
-
-Configuration metadata is the key point for developers to tell the Bearcat container to instantiate, configure, and assemble the objects in your application.  
-In bearcat, configuration metadata is embeded into javaScript objects with some syntax sugars as showed below.   
+## 配置meta标记
 
 配置meta标记是开发者告诉Bearcat容器如何初始化、配置以及组装对象到应用程序的关键点. Bearcat允许配置标记以语法糖出现在JavaScript对象属性中, 如下所示: 
 
@@ -50,7 +47,7 @@ module.exports = JsObject;
 
 ### 前端浏览器
 
-``` html
+```html
 <script src="./lib/bearcat.js"></script>
 <script src="./bearcat-bootstrap.js"></script>
 <script type="text/javascript">
@@ -98,7 +95,7 @@ bean本质上就是定义好的创建对象的配方, 当需求一个对象时, 
 
 ### 使用constructor实例化
 
-In Bearcat, instantiation with a constructor is quite easy, with self-described configuration metadata you can specify your bean class as follows:  
+使用构造方法来实例化对象很简单, 通过自描述的语法糖meta标记来定义bean即可.
 
 ```js
 var Bean = function() {
@@ -110,22 +107,20 @@ module.exports = Bean;
 
 ### 使用工厂方法实例化
 
-To use this mechanism, add the ***factoryBean*** attribute, specify the name of a bean in the current container and the instance method that is to be invoked to create the Object. 
-Set the name of the factory method itself with the ***factoryMethod*** attribute.  
-
 使用此装置, 增加 ***factoryBean*** 属性, 指定当前容器中一个单例bean的名字, 增加 ***factoryMethod*** 属性, 指定该单例中的方法, 作为创建此对象时的回调方法. 
 
 ```js
 var Car = function() {
     this.$id = "car";
-    this.$factoryBean = "carFactory";
-    this.$factoryMethod = "createCar";
+    this.$factoryBean = "carFactory";       // 工厂类id
+    this.$factoryMethod = "createCar";      // 工厂类中, 用于创建本对象的方法名
 };
   
 module.exports = Car;
 ```
 
 carFactory.js
+
 ```js
 var Car = require('./car');
 
@@ -156,21 +151,38 @@ var Car = function() {
 module.exports = Car;
 ```
 
+或者定义 context.json
+
+```json
+{
+"name": "simple_lazy_init",
+"beans": [{
+    "id": "car",
+    "func": "car",
+    "lazy": true
+}]
+}
+```
+
+
 ## 依赖
 
-Dependency injection (DI) is a process whereby objects define their dependencies, that is, the other objects they work with, only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method. The container then injects those dependencies when it creates the bean. This process is fundamentally the inverse, hence the name Inversion of Control (IoC), of the bean itself controlling the instantiation or location of its dependencies on its own by using direct construction of classes, or the Service Locator pattern.  
-Code is cleaner with the DI principle and decoupling is more effective when objects are provided with their dependencies. The object does not look up its dependencies, and does not know the location or class of the dependencies. As such, your classes become easier to test, in particular when the dependencies are on interfaces or abstract base classes, which allow for stub or mock implementations to be used in unit tests.  
+依赖注入(DI), 是这样一个过程: 对象定义好自己的依赖关系, 也就是那些所需要依赖的对象, 通过构造函数参数, 工厂方法, 或者是对象创建好后的属性. 然后, 容器根据对象的依赖定义, 把对象所依赖的对象一一注入到对象中去. 这整个过程与一般的处理方式相反, 对象对于依赖并不是主动的去创建, 而是把这一责任交给了容器来完成, 通过容器来完成了控制的反转(IoC), 对象本身不负责依赖的创建工作, 它只是向容器描述清楚自己所需要的依赖, 之后的事情, 就全交给容器来完成了.
+通过DI代码会变得更加清晰明了, 代码之间的耦合也会更加松散. 对象不必要自己去寻找依赖, 把依赖先require进来, 然后实例化, 也就无需要知道依赖所处的位置(require的时候, 数好文件夹有几层, 文件叫什么名字).
 
-依赖注入(DI) 
+DI 有两种方式, [基于构造函数的依赖注入](#基于构造函数的依赖注入) 和 [基于对象属性的依赖注入](#基于对象属性的依赖注入)
 
-DI exists in two major variants, [Constructor-based dependency injection](#Constructor-based_dependency_injection) and [Properties-based dependency injection](#Properties-based_dependency_injection).  
+### 基于构造函数的依赖注入
 
-### Constructor-based dependency injection
-Constructor-based DI is accomplished by the container invoking a constructor with a number of arguments, each representing a dependency.  
+#### 注入一个bean对象的例子:
+
+基于构造函数的依赖注入, 容器通过构造函数所表达的依赖关系, 调用构造函数来完成的.
+
 car.js
+
 ```js
-// the Car has a dependency on an Engine
-// a constructor so that the Bearcat container can inject an Engine
+// Car 的$engine属性依赖于 Engine
+// Car 有一个$engine参数, 以便于Bearcat容器注入一个Engine
 var Car = function($engine) {
     this.$id = "car";
     this.$engine = $engine;
@@ -185,6 +197,7 @@ module.exports = Car;
 ```
 
 engine.js
+
 ```js
 var Engine = function() {
     this.$id = "engine";
@@ -197,11 +210,54 @@ Engine.prototype.run = function() {
 module.exports = Engine;
 ```
 
-Besides inject a bean into the constructor, you can specify to inject ***variable*** into the constructor.  
 
-inject ***variable*** example:  
+#### 注入 ***value*** 例子:
+
+car.js
+
+```js
+var Car = function(num) {
+	this.num = num;
+};
+
+Car.prototype.run = function() {
+	console.log('run car...');
+	return 'car ' + this.num;
+};
+
+module.exports = Car;
+```
+
+context.json
+
+```json
+{
+	"name": "simple_args_value",
+	"beans": [{
+		"id": "car",
+		"func": "car",
+		"args": [{
+			"name": "num",
+			"value": 100
+		}]
+	}]
+}
+```
+
+main.js
+
+```js
+var car = bearcat.getBean('car');
+car.run(); // car 100
+```
+
+
+#### 注入 ***variable*** 例子:
+
+除了可以通过构造函数注入另一个bean对象之外, 还可以在构造函数中注入 ***variable*** (变量, getBean 调用时可以传入具体参数)
 
 car.js  
+
 ```js
 var Car = function(num) {
     this.$id = "car";
@@ -216,26 +272,28 @@ Car.prototype.run = function() {
 module.exports = Car;
 ```
 
+使用 ***$T*** 开头的变量指定 ***variable*** 是可以通过给构造函数传递 ***num*** 参数被注入的.
+
 main.js
+
 ```js
 var car = bearcat.getBean('car', 100);
 car.run(); // car 100
-``` 
+```
 
-use the attribute with the prefix ***$T*** to specify the ***variable*** to be injected into the constructor with the argument named ***num***  
 
-main.js
-```js
-var car = bearcat.getBean('car', 100);
-car.run(); // car 100
-``` 
 
-### Properties-based dependency injection
-Properties-based DI is accomplished by the container setting properties dynamicly.  
+### 基于对象属性的依赖注入
+
+#### 注入一个bean对象的例子:
+
+基于对象属性的依赖注入是通过容器动态的对象属性进行设置来完成(这在node.js中非常容易).
+
 car.js
+
 ```js
-// the Car has a dependency on an Engine
-// in constructor specify the engine properties to null for V8 optimization
+// Car 的$engine属性依赖于 Engine
+// 在构造方法中给$engine属性赋值为null, 让V8引擎对其自动优化
 var Car = function() {
     this.$id = "car";
     this.$engine = null;
@@ -250,6 +308,7 @@ module.exports = Car;
 ```
 
 engine.js
+
 ```js
 var Engine = function() {
     this.$id = "engine";
@@ -262,10 +321,13 @@ Engine.prototype.run = function() {
 module.exports = Engine;
 ```
 
-you can also specify to inject ***value*** into the properties from configuration files for example.  
 
-inject value example:  
-car.js  
+#### 注入 ***value*** 例子:
+
+同 [基于构造函数的依赖注入](#基于构造函数的依赖注入) 一样, 你可以从配置文件中注入 ***value*** 到 properties 中.
+
+car.js
+
 ```js
 var Car = function() {
     this.$id = "car";
@@ -280,32 +342,44 @@ Car.prototype.run = function() {
 module.exports = Car;
 ```
 
-car.json  
-```js
-{
-    "car.num": 100
-}
+car.json
+
+```json
+{"car.num": 100}
 ```
 
 main.js
+
 ```js
 var car = bearcat.getBean('car');
 car.run(); // car 100
-``` 
+```
 
-Note: there is no need for Properties-based dependency injection to inject ***variable*** type into the properties  
+注: 对于基于 Properties 的依赖注入来说, 注入 ***variable*** 就没什么必要了, 因为variable注入必然要通过构造函数的参数形式传入其中.
 
-## Bean scopes
-When you create a bean definition, you create a recipe for creating actual instances of the class defined by that bean definition. The idea that a bean definition is a recipe is important, because it means that, as with a class, you can create many object instances from a single recipe.  
+## 个人理解
 
-You can control not only the various dependencies and configuration values that are to be plugged into an object that is created from a particular bean definition, but also the scope of the objects created from a particular bean definition.  
+[基于构造函数的依赖注入](#基于构造函数的依赖注入): 就是在构造函数上面增加参数, 以$开头的参数为Bean注入, 非$开头的可以是value注入(在context.json中配置value值), 也可以是variable注入(调用getBean的时候传进去).
 
-You can use ***scope*** attribute to specify the scope of the bean.  
+[基于对象属性的依赖注入](#基于对象属性的依赖注入): 构造函数上不加参数, 使用构造函数内属性$语法糖. 除了保留字之外, $开头的将解析为对象的实例; 还可以使用占位符直接将值注入到对象中.
 
-### The singleton scope
-Only one shared instance of a singleton bean is managed, and all requests for beans with an id or ids matching that bean definition result in that one specific bean instance being returned by the Bearcat container. The singleton beans will preInstantiate by default.  
 
-By default, scope is singleton  
+## Bean 的 scopes
+
+创建Bean类时, 实际是创建了一个能实例化类的途径. 在脑海中强化bean是一个能实例化类的途径这个概念非常重要, 因为这意味着可以通过一个定义好的与类一一对应的bean创建很多对象.
+
+你不仅可以控制依赖和配置的多样性(这些依赖和配置可以被注入到一个由特殊bean定义来创建的对象), 也可以控制由特殊bean定义创建的对象的范围.
+
+通过bean的定义, 不仅仅可以定义不同的依赖和配置信息, 还可以定义bean的作用范围(scope).
+
+可以通过 ***scope*** 属性来定义bean的作用范围
+
+### 单例 Scope
+
+仅仅只有一份单例bean的实例, 所有的对名叫id的bean的请求都返回同一个bean实例. 单例的bean默认会预创建在容器启动的时候.
+
+默认情况下, 作用范围就是 singleton(单例)
+
 ```js
 var Car = function() {
     this.$id = "car";
@@ -316,14 +390,18 @@ module.exports = Car;
 ```
 
 main.js
+
 ```js
 var car1 = bearcat.getBean('car');
 var car2 = bearcat.getBean('car');
 // car2 is exactly the same instance as car1
 ```
 
-### The prototype scope
-The non-singleton, prototype scope of bean deployment results in the creation of a new bean instance every time a request for that specific bean is made. That is, the bean is injected into another bean or you request it through a `getBean()` method call on the container. As a rule, use the prototype scope for all stateful beans and the singleton scope for stateless beans.  
+### 原型 Scope
+
+原型(prototype)意味着每次对名叫id的bean的请求, 容器都会创建一个新的bean实例. 作为经验, `原型 Scope` 的bean适用于有状态的beans, 而`单例 Scope`适用于无状态的beans.
+
+有人也称 prototype scope 为 `多例 Scope`.
 
 ```js
 var Car = function() {
@@ -341,16 +419,20 @@ var car2 = bearcat.getBean('car');
 // car2 is not the same instance as car1
 ```
 
-## Customizing the nature of a bean
-### Lifecycle callbacks
-To interact with the container management of the bean lifecycle, you can add ***init*** and ***destroy*** method with the attribute ***init*** and  ***destroy*** .  
+## 定制Bean的生成与消亡逻辑
 
-#### Initialization method
+### 声明周期回调
+
+添加对容器所管理的bean的生命周期回调, 可以通过使用 ***$init*** 和 ***$destroy*** 属性来添加 ***init*** 和 ***destroy*** 方法
+
+#### 初始化init方法
+
 car.js
 ```js
 var Car = function() {
     this.$id = "car";
     this.$init = "init";
+    
     this.num = 0;
 };
   
@@ -368,10 +450,12 @@ Car.prototype.run = function() {
 module.exports = Car;
 ```
 
-when car is requested by ***getBean*** invoke, init method will be called to do some init actions  
+当car被 ***getBean*** 调用请求时, ***$init*** 指定的方法(本例中为init方法)会被调用来做一些初始化的事情. 
 
-#### Destruction method
+#### 析构destroy方法
+
 car.js
+
 ```js
 var Car = function() {
     this.$id = "car";
@@ -391,14 +475,18 @@ Car.prototype.run = function() {
 module.exports = Car;
 ```
 
-when the container is ready to stop, beans in the container will call ***destroy*** method if setted.  
+当容器准备停止的时候, 如果bean设置了 ***$destroy*** 属性, 会在停止之前调用所有bean的 ***$destroy*** 指定的方法(本例中为destroy方法).
 
-#### Async Initialization method
-In nodejs, almost everything is async, so async initialization is quite common.  
-When async initialization is required, use the ***async*** attribute to specify a async initialization method and in the function method, call ***cb*** callback function to end the async init action.  
-When multiple async initializations are required, use the ***order*** attribute to specify the order of the bean initialization.  
+#### 异步初始化init方法
+
+在Node中, 几乎都是异步的, 所以, 异步的init也是相当的普遍.
+
+当异步init的时候, 使用 async 属性来标识该init方法是异步的, 并且在init方法里面, 调用 cb 回调函数来表示异步init方法的结束.
+
+当有多个异步init方法的时候, 使用 order 属性来标识bean实例化的顺序, order 越小的越早实例化, 没有order属性的则实例化越晚.
 
 car.js
+
 ```js
 var Car = function() {
     this.$id = "car";
@@ -422,6 +510,7 @@ module.exports = Car;
 ```
 
 wheel.js
+
 ```js
 var Wheel = function() {
     this.$id = "wheel";
@@ -446,15 +535,18 @@ Wheel.prototype.run = function() {
 module.exports = Wheel;
 ```
 
-in this example, wheel has an async initialization method and must be init before car, so besides set the ***async*** attribute to true, should set the ***order*** attribute to to smaller than the car.  
+在这个例子中, wheel 有一个异步init方法, 而且必须在 car 之前实例化, 因此除了要设置 async 属性为true之外, 还需要设置 order 属性比 car 的 order 的值要小.
 
-## Bean definition inheritance
-A bean definition can contain a lot of configuration information, including constructor arguments, property values, and container-specific information such as initialization method, static factory method name, and so on. A child bean definition inherits configuration data from a parent definition. The child definition can override some values, or add others, as needed. Using parent and child bean definitions can save a lot of typing. Effectively, this is a form of templating.  
+## Bean 定义继承
 
-In Bearcat, use the ***parent*** to specify the parent bean to inherit the bean definition.  
-Besides bean definition inheritance, child bean will inherit methods from parent bean prototype which it does not have  
+bean 定义包含很多配置信息, 包含构造函数参数, 对象属性的值, 容器特定属性比如初始化init方法, 工厂方法等等. 一个子bean定义可以继承在父bean中的定义, 也可以覆盖一些值, 添加另外一些值. 使用bean定义继承可以节省很多事情, 这其实是模板的一种方式.
+
+在Bearcat中, 使用 ***$parent*** 来指定父bean是谁, 以便继承bean定义(属性/方法/注入的内容...).
+
+除了bean定义的继承, 子bean还会从父bean的prototype里面继承子bean所没有的方法.
 
 bus.js
+
 ```js
 var Bus = function(engine, wheel, num) {
     this.engine = engine;
@@ -481,6 +573,7 @@ module.exports = {
 ```
 
 car.js
+
 ```js
 var n = 1;
 
@@ -496,7 +589,13 @@ Car.prototype.run = function() {
     this.wheel.run();
     console.log(this.num);
 };
-  
+
+Car.prototype.stop = function() {
+    this.engine.stop();
+    this.wheel.stop();
+    console.log("car stop...");
+};
+
 module.exports = {
     func: Car,
     id: "car",
@@ -514,22 +613,30 @@ module.exports = {
 };
 ```
 
-in this example, bus has a parent bean car, and it will inherit the bean definition from car, therefore, bus has the num with value of 100 which is inherited from car.  
+在这个例子中, bus 有一个父亲bean car, bus 会继承 car 的 bean 定义, 因此, bus 的 num 的值是100, 这个是从 car 继承而来的.
 
-## Abstract bean
-When a bean is marked as an abstract bean, it is usable only as a pure template bean definition that servers as a parent definition for child definitions. It is abstract and can not be initialized by ***getBean*** method, you can get the abstract bean constructor function by ***bearcat.getFunction*** method to handle child inherition. Similarly, the container’s internal preInstantiateSingletons() method ignores bean definitions that are defined as abstract.  
+bus 也会拥有一个 从 car 继承过来的 stop 方法, 只不过这个方法还是会输出 'car stop...'; 
 
-## Bean namespace
-bean can have `namespace` , by default the namespace is null, all beans can be requested through unique  `id` , when some beans specify to have a  `namespace` , it must be requested by  `namespace:id`  
+## 抽象 bean
 
-the magic attribute for namespace is
+当一个bean被标记为是抽象的, 意味着该bean的定义被作为子bean们的模板. 它是抽象的, 不能够被 ***getBean*** 方法调用得到bean实例, 你可以通过 ***bearcat.getFunction*** 方法得到bean的构造函数来处理子bean继承的问题. 类似的, 容器在通过内部 preInstantiateSingletons() 启动的时候也会忽略抽象的bean.
+
+## Bean 命名空间
+
+Bean可以有自己的命名空间, 默认是 `null`, 所有的bean都可以直接只用唯一的 `id` 来获取; 当给bean指定了 `namespace` 命名空间之后, 访问bean就必须使用 `namespace:id` 了.
+
+注入其他命名空间中某个对象的到本类中的魔术语法糖为: 
   
 ```js
-this.$Nid = "namespace:id";
+this.$Nxxx = "namespace:id";
 ```
 
-in `context.json` , specify the  `namespace` attribute to set up namespace, and in `beans` attribute, set up which beans have the namespace  
+其中 `$N` 为命名空间语法糖; xxxx为本类中自定义的变量名, 用于访问注入的对象; namespace为要注入的对象所在的命名空间名; id为要注入的对象在在对应命名空间中的$id.
+
+在 `context.json` 中指定 `namespace` 属性来设置整个scan目录的命名空间; 在 `beans` 属性中指定 `namespace` 来设置bean的命名空间  
+
 context.json
+
 ```json
 {
     "name": "beans",
@@ -541,14 +648,17 @@ context.json
     }]
 }
 ```
-you can refer to [context_namespace example](https://github.com/bearcatjs/bearcat/tree/master/examples/context_namespace) for more details
 
-## Note
-you can write $ based syntax sugars as you like, so the following is also ok  
+可以参考 [上下文中定义的命名空间](https://github.com/bearcatjs/bearcat/tree/master/examples/context_namespace) 具体了解命名空间.
+
+## 写在后面
+
+当使用 $ 语法糖属性的时候, 下面的写法均有效:  
 
 ```js
 var Car = function() {
     this.$id = "car";
+    
     this["$engine"] = null; // use []
     var wheelName = "$wheel";
     this[wheelName] = null; // use variable
@@ -566,4 +676,4 @@ Car.prototype.run = function() {
 module.exports = Car;
 ```
 
-a full example can be found on [complex_function_annotation](https://github.com/bearcatjs/bearcat/tree/master/examples/complex_function_annotation)
+具体可以参考 [复杂的语法糖属性](https://github.com/bearcatjs/bearcat/tree/master/examples/complex_function_annotation)

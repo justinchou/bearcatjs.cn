@@ -10,5 +10,10 @@ pipeline {
 cp -rf bearcat-examples public/examples'''
       }
     }
+    stage('deploy') {
+      steps {
+        sh 'make d'
+      }
+    }
   }
 }

@@ -1,7 +1,9 @@
-title: Performance Comparisons
+title: 性能比较
+type: pref
+order: 1
 ---
 
-## TodoMVC Benchmark
+## Todo MVC Benchmark
 
 > *Last Updated: 2014-10-12*
 

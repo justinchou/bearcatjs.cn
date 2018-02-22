@@ -18,6 +18,7 @@ Browserify通过将所有依赖打包的方式, 让你可以简单的使用requi
 然后在其他文件需要从browserify中引用库的时候, 只需要注入 `requireUtil` 到该文件中即可.
 
 requireUtil.js
+
 ```js
 var RequireUtil = function() {
     this.$id = "requireUtil";
@@ -35,6 +36,7 @@ bearcat.module(RequireUtil, typeof module !== 'undefined' ? module : {});
 接着在控制器JavaScript文件中,  使用魔法属性 `$requireUtil` 注入 `requireUtil` 
 
 markDownController.js
+
 ```js
 var MarkDownController = function() {
     this.$id = "markDownController";
@@ -47,6 +49,7 @@ bearcat.module(MarkDownController, typeof module !== 'undefined' ? module : {});
 最后专注于编写业务逻辑: 
 
 markDownController.js
+
 ```js
 var MarkDownController = function() {
     this.$id = "markDownController";

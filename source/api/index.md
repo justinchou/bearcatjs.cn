@@ -112,7 +112,7 @@ order: 1
  // 通过meta标签
  var car = bearcat.getBean({
     id: "car",
-    func: Car // Car is a function constructor
+    func: Car // Car 是一个Function构造函数
  });
 
  // 通过含有 `$` 属性的方法
@@ -151,7 +151,7 @@ order: 1
  例子:
   
 ```js
- // through beanName
+ // 通过 Function 的唯一ID
  var Car = bearcat.getFunction("car");
  ```
 
@@ -181,11 +181,12 @@ order: 1
 
  通过meta标签从控制反转(IoC)容器中获取bean实例.
 
- examples:  
+ 例子:
+ 
 ```js
  bearcat.getBeanByMeta({
     id: "car",
-    func: Car // Car is a function constructor
+    func: Car // Car 是一个Function构造函数
  });
  ```
 

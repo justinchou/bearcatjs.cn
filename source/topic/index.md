@@ -21,7 +21,7 @@ Bearcat热更新依赖Bearcat强大的控制反转容器, 监听一些事件, �
 ```js
 bearcat.createApp([contextPath], {
 	BEARCAT_HOT: 'on',
-	BEARCAT_HPATH: 'setup your hot reload source path'
+	BEARCAT_HPATH: '设置热更新文件的目录'
 })
 ```
 

@@ -14,6 +14,7 @@ order: 2
  `melonjs`  为开发者提供了丰富的可用基类,  `melonjs` 库中, 你会经常看到类似如下的代码:
 
 pipeEntity.js
+
 ```js
 var PipeEntity = me.ObjectEntity.extend({
     init: function(x, y) {
@@ -32,6 +33,7 @@ var PipeEntity = me.ObjectEntity.extend({
 想要开始使用Bearcat, 只需要将上面的代码放在bean工厂中, 无论谁需要使用 `PipeEntity` 的时候, 只需要通过工厂构造方法就可以获取实例. bean工厂直接连接Bearcat强大的依赖注入实现功能.
 
 PipeEntityFactory.js
+
 ```js
 var PipeEntityFactory = function() {
     this.$id = "pipeEntity";

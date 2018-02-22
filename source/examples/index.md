@@ -10,6 +10,7 @@ order: 0
 BMW页面, 使用  `bmwCarController` , 依赖  `bmwCar` 
 
 bmwCarController.js
+
 ```js
 var BmwCarController = function() {
     this.$id = "bmwCarController";
@@ -26,6 +27,7 @@ bearcat.module(BmwCarController, typeof module !== 'undefined' ? module : {});
  `bmwCar`  依赖 `bmwEngine` 和 `bmwWheel`  
 
 bmwCar.js
+
 ```js
 var BmwCar = function() {
     this.$id = "bmwCar";

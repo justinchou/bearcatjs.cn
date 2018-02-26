@@ -29,6 +29,7 @@ Bearcat中, 指定了namespace之后, 使用依赖注入或者getBean方法时, 
 
 ### 举个🌰
 
+```json
 {
     "name": "bean-context-example",
     "scan": "app",
@@ -45,3 +46,4 @@ Bearcat中, 指定了namespace之后, 使用依赖注入或者getBean方法时, 
     }],
     "dependencies": []
 }
+```

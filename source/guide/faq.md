@@ -63,7 +63,7 @@ var Handler = function(app) {
 
 这段代码是想让这个handler可以复用对吧？但是我觉得其实没有解耦啊。 第一，handler对象的生成依赖于app对象，添加到bearcat中也需要app对象 第二，bearcat对象自己本身如何在多个js文件中共享呢？这个例子是通过放到pomelo的app里面的。如果一个拿不到app对象的js文件里面，如何使用bearcat中已有的bean呢？
 
-### 答
+#### 答
 
 1：第一个例子这么写，是因为pomelo里面的handler,remote是通过pomelo-loader管理加载的,bearcat要切入进来就需要一个proxy，这里通过bearcat.getBean返回了一个proxy，这个proxy当具体handler被调用时，会去实例化对应的handler，然后调用，这里面依赖的app完全是要兼容之前的代码而已。在这里handler一般是不复用的，当然也可以复用，这里主要复用的是service, util, consts等模块，复杂的例子可以看 [playerHandler](https://github.com/bearcatnode/treasures/blob/master/game-server/app/servers/area/handler/playerHandler.js#L129)
 
@@ -117,7 +117,7 @@ module.exports = code;
 
 不想按例子里要写成  `var code = function() {this.OK = 200}` , 因为这些code可能在客户端里也要
 
-### 答
+#### 答
 
 bearcat 里面要求的是有构造函数的，不能直接这样子用匿名对象的
 

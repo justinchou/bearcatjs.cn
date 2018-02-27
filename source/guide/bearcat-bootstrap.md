@@ -27,6 +27,8 @@ bearcat generate
 <script src="bearcat-bootstrap.js"></script>
 ```
 
- ***注意*** 
+***提示*** 
 
 仅当增加/删除某个文件, 或者移动文件路径的时候需要重新生成 `bearcat-bootstrap.js` , 当仅仅是修改文件内容, 则无需重新生成.
+
+当需要浏览器与服务器共同运行的时候, 需要参考 [前后端共用代码的注意事项](/guide/index.html#前后端共用代码的注意事项)

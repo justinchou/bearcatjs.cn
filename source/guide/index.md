@@ -132,7 +132,7 @@ index.html
     <script src="./bearcat-bootstrap.js"></script>
     <script type="text/javascript">
     bearcat.createApp();   // 创建bearcat对象
-    bearcat.use(['car']);  // 需要用到的对象
+    bearcat.use(['car']);  // 需要用到的对象, 这时会调用require加载该文件
     bearcat.start(function() {
         // 当进入这个回调时候, 所有需要加载的一切已经就绪
         var car = bearcat.getBean('car');
@@ -154,8 +154,10 @@ var bearcat = require('bearcat');
 
 var contextPath = require.resolve('./context.json');
 
-global.bearcat = bearcat; // make bearcat global, for  `bearcat.module()` 
-bearcat.createApp([contextPath]);
+global.bearcat = bearcat; // 使Bearcat全局可用, `bearcat.module()` 
+bearcat.createApp([contextPath], {
+    BEARCAT_GLOBAL: true // 使Bearcat全局可用, 同global.bearcat
+});
 
 bearcat.start(function() {
   var car = bearcat.getBean('car'); // 获取一辆车
@@ -164,5 +166,58 @@ bearcat.start(function() {
 ```
 
 正如所见, nodejs本身就是异步加载文件, 所以无需bearcat-bootstrap.js文件, 只需要配置'context.json'即可令bearcat自动分析, 完成依赖注入, 将JavaScript对象为你自动准备好.
+
+### 前后端共用代码的注意事项
+
+要使前后端可用共用代码, 首先就是要摒弃前后端不通用的语法特性.
+
+* 不能使用 `module.exports = ClassName;` 导出包, 必须使用 `bearcat.module(ClassName, typeof module !== 'undefined' ? module : {});`
+
+这就意味着该代码无法使用热更新加载, 具体情况参照热更新的注意事项部分.
+
+* 必须在服务器端添加全局访问 `global.bearcat = bearcat;` 或者 `BEARCAT_GLOBAL: true`
+
+这样就无需再每个类文件中进行 bearcat 的 require 工作, 消除了服务器特性.
+
+* 使用 `bearcat.module(ClassName ....` 就意味着不能使用 `context.json` / `module.exports` 的定义和args/props注入, 只能使用 $ 类型的属性注入或者$类型构造函数注入.
+
+```js
+var Bus = function Bus() {
+    this.$id = "bus";
+    this.$scope = "prototype";
+    this.$parent = 'transport';
+
+    this.$engine = null;
+    this.licence = "${default.licence}"
+};
+
+Bus.prototype.run = function () {
+    this.$engine.run();
+    console.log('please show me your **  bus  ** licence, my licence is [ %s ]', this.licence);
+};
+
+bearcat.module(Bus, typeof module !== 'undefined' ? module : {});
+```
+
+```js
+var Car = function Car($engine, licence) {
+    this.$id = "car";
+    this.$scope = "prototype";
+    this.$parent = 'transport';
+
+    this.engine = $engine;
+    this.licence = licence;
+};
+
+Car.prototype.run = function () {
+    this.engine.run();
+    console.log('please show me your **  car  ** licence, my licence is [ %s ]', this.licence);
+};
+
+bearcat.module(Car, typeof module !== 'undefined' ? module : {});
+```
+
+* 尽量避免写Es6特性的语法, 例如 `let`, `const`, `class` ...
+
 
 完整的代码可以在 [这里](https://github.com/bearcatjs/bearcat-examples) 找到, 尽情玩耍吧!

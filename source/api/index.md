@@ -3,6 +3,8 @@ type: api
 order: 1
 ---
 
+# 声明Bearcat框架环境
+
 
 ## createApp
 
@@ -50,6 +52,12 @@ order: 1
  * @api public
 
 
+# 前端浏览器使用
+
+
+ps: 通过 bearcat-bootstrap.js 自动管理, 用到哪个文件加载那个文件
+
+
 ## use
 
  用于浏览器端加载bean, 声明需要加载到Bearcat中的bean, 通过require直接载入, 一般在启动后一次性载入需要文件列表.
@@ -82,24 +90,109 @@ order: 1
  * @api public
 
 
-## module
+# 前后端通用方法
+
+
+## 用于定义声明, 并且输出 Bearcat 类文件
+
+
+### meta (since v1.0.4)
+
+ 通过类中的Meta标签(非context中)来将bean模块注册到控制反转(IoC)容器中.
+ 
+ 解决原有 module.exports 导出的 meta 无法在浏览器中使用的问题.
+ 
+ 在 v1.0.4 版本增加, 开始支持.
+
+ 例子:
+
+```js
+ function Car () {
+     this.engine = null;
+     this.licence = null;
+ }
+ bearcat.meta({
+     id: 'car',
+     func: Car,
+     scope: 'prototype',
+     props: [{
+         name: 'engine',
+         ref: 'engine'
+     }, {
+         name: 'licence',
+         value: '${default.licence}'
+     }]
+ }, typeof module !== 'undefined' ? module : {});
+
+ // let cat = bearcat.getBean('car');
+```
+
+```js
+ function Car(engine, licence) {
+     this.engine = engine;
+     this.licence = licence;
+ };
+ bearcat.meta({
+     id: 'car',
+     func: Car,
+     scope: 'prototype',
+     args: [{
+         name: 'engine',
+         ref: 'engine'
+     }, {
+         name: 'licence',
+         type: 'String'
+     }]
+ }, typeof module !== 'undefined' ? module : {});
+ 
+ // let cat = bearcat.getBean('car', '123456');
+```
+
+ * @api public
+ 
+
+
+### module
 
  通过自描述的语法糖 `$` 将bean模块注册到控制反转(IoC)容器中.
 
  例子:
 
 ```js
- bearcat.module(function() {
+ function Car() {
      this.$id = "car";
      this.$scope = "prototype";
- });
+     this.$engine = null;
+     this.$licence = '${default.licence}';
+ }
+ bearcat.module(Car, typeof module !== 'undefined' ? module : {});
+
+ // let cat = bearcat.getBean('car');
 ```
 
- * @param  {Function} ** `$` 描述属性的方法**
+```js
+ function Car($engine, licence) {
+     this.$id = 'car';
+     this.$scope = 'prototype';
+ 
+     this.engine = $engine;
+     this.licence = licence;
+ };
+ bearcat.module(Car, typeof module !== 'undefined' ? module : {});
+ 
+ // let cat = bearcat.getBean('car', '123456');
+```
+
+ * @param {Function} ** `$` 描述属性的方法**
  * @api public
 
 
-## getBean
+## 用于获取 Bearcat 对象 
+
+ps: 声明定义好类之后, 通过设置context, Bearcat自动管理对象的初始化.
+
+
+### getBean
 
  从控制反转(IoC)容器中, 通过bean名/meta标签获取bean.
 
@@ -127,40 +220,7 @@ order: 1
  * @api public
 
 
-## getRoute
-
- 为方便使用MVC框架路由器定制的方法.
-
- 例子:
-
-```js
- // express
- var app = express();
- app.get('/', bearcat.getRoute('bearController', 'index'));
-```
-
- * @param  {String} **bean名**
- * @param  {String} **bean中用于执行的路由名**
- * @api public
-
-
-## getFunction
-
- 通过bean名从控制反转(IoC)容器中获取bean构造方法.
-
- 例子:
-  
-```js
- // 通过 Function 的唯一ID
- var Car = bearcat.getFunction("car");
- ```
-
- * @param  {String}   **bean名**
- * @return {Function} **bean构造方法**
- * @api public
- 
- 
-## getBeanByFunc
+### getBeanByFunc
 
  通过含有 `$` 描述属性的方法, 从控制反转(IoC)容器中获取bean实例.
 
@@ -177,7 +237,7 @@ order: 1
  * @api public
 
 
-## getBeanByMeta
+### getBeanByMeta
 
  通过meta标签从控制反转(IoC)容器中获取bean实例.
 
@@ -192,5 +252,45 @@ order: 1
 
  * @param  {Object} **meta标签**
  * @api public
+ 
+ 
+ 
+
+
+## 用于获取 Bearcat 类/类方法
+
+
+### getRoute
+
+ 为方便使用MVC框架路由器定制的方法.
+
+ 例子:
+
+```js
+ // express
+ var app = express();
+ app.get('/', bearcat.getRoute('bearController', 'index'));
+```
+
+ * @param  {String} **bean名**
+ * @param  {String} **bean中用于执行的路由名**
+ * @api public
+
+
+### getFunction
+
+ 通过bean名从控制反转(IoC)容器中获取bean构造方法.
+
+ 例子:
+  
+```js
+ // 通过 Function 的唯一ID
+ var Car = bearcat.getFunction("car");
+ ```
+
+ * @param  {String}   **bean名**
+ * @return {Function} **bean构造方法**
+ * @api public
+ 
  
  
